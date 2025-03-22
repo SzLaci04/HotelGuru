@@ -1,23 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\dani\\Source\\Repos\\HotelGuru\\Hotelguru\\Hotelguru.csproj": {}
+    "D:\\Tanulás\\HotelGuru\\Hotelguru\\Hotelguru.csproj": {}
   },
   "projects": {
-    "C:\\Users\\dani\\Source\\Repos\\HotelGuru\\Hotelguru\\Hotelguru.csproj": {
+    "D:\\Tanulás\\HotelGuru\\Hotelguru\\Hotelguru.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dani\\Source\\Repos\\HotelGuru\\Hotelguru\\Hotelguru.csproj",
+        "projectUniqueName": "D:\\Tanulás\\HotelGuru\\Hotelguru\\Hotelguru.csproj",
         "projectName": "Hotelguru",
-        "projectPath": "C:\\Users\\dani\\Source\\Repos\\HotelGuru\\Hotelguru\\Hotelguru.csproj",
-        "packagesPath": "C:\\Users\\dani\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dani\\Source\\Repos\\HotelGuru\\Hotelguru\\obj\\",
+        "projectPath": "D:\\Tanulás\\HotelGuru\\Hotelguru\\Hotelguru.csproj",
+        "packagesPath": "C:\\Users\\Lakos\\.nuget\\packages\\",
+        "outputPath": "D:\\Tanulás\\HotelGuru\\Hotelguru\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\dani\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Lakos\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -43,18 +44,11 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.200"
+        }
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "dependencies": {
-            "Microsoft.AspNetCore.OpenApi": {
-              "target": "Package",
-              "version": "[9.0.3, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",
@@ -66,15 +60,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
