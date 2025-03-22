@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace HotelGuru.DataContext.Entities
 {
-    internal class Szoba
+    internal class BankkartyasFizetesHitelesitese
     {
-            public int SzobaID { get; set; }
-            public int AgyakSzama { get; set; }
-            public int EjszakaAr { get; set; }
+        public bool BankkartyaHitelesitese(RegisztraltFelhasznalo felhasznalo) { return true; }
     }
 }
