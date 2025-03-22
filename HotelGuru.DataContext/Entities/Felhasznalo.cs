@@ -15,5 +15,8 @@ namespace HotelGuru.DataContext.Entities
         public string Lakcim { get; set; }
         public int Telefonszam { get; set; }
         public int Bankkartya { get; set; }
+
+        public void Bejelentkezes() { }
+        public void Kijelentkezes() { }
     }
 }

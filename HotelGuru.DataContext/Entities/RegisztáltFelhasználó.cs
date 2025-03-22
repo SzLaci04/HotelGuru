@@ -8,6 +8,9 @@ namespace HotelGuru.DataContext.Entities
 {
     internal class RegisztraltFelhasznalo : Felhasznalo
     {
+        public void EmailModositas(string ujEmail) { }
+        public void TelefonszamModositas(int ujTelefonszam) { }
+        public void LakcimModositas(string ujLakcim) { }
 
     }
 }

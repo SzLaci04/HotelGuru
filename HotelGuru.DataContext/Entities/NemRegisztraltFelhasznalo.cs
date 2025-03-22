@@ -8,6 +8,6 @@ namespace HotelGuru.DataContext.Entities
 {
     internal class NemRegisztraltFelhasznalo
     {
-
+        public void FelhasznaloRegisztral() { }
     }
 }
