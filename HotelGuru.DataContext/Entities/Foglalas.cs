@@ -12,5 +12,6 @@ namespace HotelGuru.DataContext.Entities
         public DateTime FoglalasIdopontja { get; set; }
         public int FoglaltSzobaID { get; set; }
         public bool HitelesBankkartya { get; set; }
+        public void ExtraSzolgaltatas(string pluszSzolgaltatas) { }
     }
 }
