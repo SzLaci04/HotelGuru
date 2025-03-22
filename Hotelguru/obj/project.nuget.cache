@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "OpFyK0DZV5g=",
+  "dgSpecHash": "6O4r+IkpOJI=",
   "success": true,
-  "projectFilePath": "D:\\Egyetem\\Rendszerfejlesztés\\rndszrfjlszts_hotelguru\\Hotelguru\\Hotelguru.csproj",
+  "projectFilePath": "C:\\Users\\dani\\Source\\Repos\\HotelGuru\\Hotelguru\\Hotelguru.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\laci1\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.3\\microsoft.aspnetcore.openapi.9.0.3.nupkg.sha512",
-    "C:\\Users\\laci1\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+    "C:\\Users\\dani\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.3\\microsoft.aspnetcore.openapi.9.0.3.nupkg.sha512",
+    "C:\\Users\\dani\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
   ],
   "logs": []
 }

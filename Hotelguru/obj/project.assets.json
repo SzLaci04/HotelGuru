@@ -75,23 +75,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\laci1\\.nuget\\packages\\": {},
+    "C:\\Users\\dani\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Egyetem\\Rendszerfejlesztés\\rndszrfjlszts_hotelguru\\Hotelguru\\Hotelguru.csproj",
+      "projectUniqueName": "C:\\Users\\dani\\Source\\Repos\\HotelGuru\\Hotelguru\\Hotelguru.csproj",
       "projectName": "Hotelguru",
-      "projectPath": "D:\\Egyetem\\Rendszerfejlesztés\\rndszrfjlszts_hotelguru\\Hotelguru\\Hotelguru.csproj",
-      "packagesPath": "C:\\Users\\laci1\\.nuget\\packages\\",
-      "outputPath": "D:\\Egyetem\\Rendszerfejlesztés\\rndszrfjlszts_hotelguru\\Hotelguru\\obj\\",
+      "projectPath": "C:\\Users\\dani\\Source\\Repos\\HotelGuru\\Hotelguru\\Hotelguru.csproj",
+      "packagesPath": "C:\\Users\\dani\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\dani\\Source\\Repos\\HotelGuru\\Hotelguru\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\laci1\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\dani\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -100,7 +100,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
