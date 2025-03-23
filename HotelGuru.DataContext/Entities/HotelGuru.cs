@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HotelGuru.DataContext.Entities
 {
-    internal class HotelGuru
+    public class HotelGuru
     {
             public int ElerhetoSzobakSzama { get; set; }
             public int LefoglaltSzobakSzama { get; set; }

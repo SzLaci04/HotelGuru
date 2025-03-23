@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Hotelguru.DataContext.Context;
+using HotelGuru.DataContext.Context;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);

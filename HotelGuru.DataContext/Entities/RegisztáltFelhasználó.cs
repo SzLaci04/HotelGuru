@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HotelGuru.DataContext.Entities
 {
-    internal class RegisztraltFelhasznalo : Felhasznalo
+    public class RegisztraltFelhasznalo : Felhasznalo
     {
         public void EmailModositas(string ujEmail) { }
         public void TelefonszamModositas(int ujTelefonszam) { }

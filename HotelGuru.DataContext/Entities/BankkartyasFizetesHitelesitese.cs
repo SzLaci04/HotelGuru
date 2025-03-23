@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HotelGuru.DataContext.Entities
 {
-    internal class BankkartyasFizetesHitelesitese
+    public class BankkartyasFizetesHitelesitese
     {
         public bool BankkartyaHitelesitese(RegisztraltFelhasznalo felhasznalo) { return true; }
     }

@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace HotelGuru.DataContext.Context
 {
-    internal class AppDbContext : DbContext
+    public class AppDbContext : DbContext
     {
-        public Dbset<Szoba> Szobak { get; set; }
-        public Dbset<Recepcios> Recepciosok { get; set; }
-        public Dbset<PluszSzolgaltatas> PluszSzolgaltatasok { get; set; }
+        public DbSet<Szoba> Szobak { get; set; }
+        public DbSet<Recepcios> Recepciosok { get; set; }
+        public DbSet<PluszSzolgaltatas> PluszSzolgaltatasok { get; set; }
 
-        public Dbset<Felhasznalo> Felhasznalok { get; set; }
-        public Dbset<Foglalas> Foglalasok {  get; set; }
+        public DbSet<Felhasznalo> Felhasznalok { get; set; }
+        public DbSet<Foglalas> Foglalasok {  get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     }

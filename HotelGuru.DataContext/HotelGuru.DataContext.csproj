@@ -18,9 +18,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\HotelGuru.Services\HotelGuru.Services.csproj" />
-    <ProjectReference Include="..\Hotelguru\Hotelguru.csproj" />
-  </ItemGroup>
-
 </Project>

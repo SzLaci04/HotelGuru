@@ -19,4 +19,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HotelGuru.DataContext\HotelGuru.DataContext.csproj" />
+    <ProjectReference Include="..\HotelGuru.Services\HotelGuru.Services.csproj" />
+  </ItemGroup>
+
 </Project>

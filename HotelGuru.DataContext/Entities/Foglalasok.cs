@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HotelGuru.DataContext.Entities
 {
-    internal class Foglalasok
+    public class Foglalasok
     {
         private List<Foglalas> Foglalasok_Lista{ get; set; }
         public int FoglalasokDarabszam { get; set; }

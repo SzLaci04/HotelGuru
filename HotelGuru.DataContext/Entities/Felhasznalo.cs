@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HotelGuru.DataContext.Entities
 {
-    abstract class Felhasznalo
+    public abstract class Felhasznalo
     {
 
         public int Id { get; set; }

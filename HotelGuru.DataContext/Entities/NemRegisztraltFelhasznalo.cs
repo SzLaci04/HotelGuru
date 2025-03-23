@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HotelGuru.DataContext.Entities
 {
-    internal class NemRegisztraltFelhasznalo
+    public class NemRegisztraltFelhasznalo
     {
         public void FelhasznaloRegisztral() { }
     }

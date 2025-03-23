@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HotelGuru.DataContext.Entities
 {
-    internal class Adminisztrator
+    public class Adminisztrator
     {
         public void SzobaAdatokModositasa() { }
         public void SzobaElerhetosegModositasa() { }
