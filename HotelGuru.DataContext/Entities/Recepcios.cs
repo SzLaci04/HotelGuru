@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HotelGuru.DataContext.Entities
 {
-    public class Recepcios
+    public class Recepcios : Felhasznalo
     {
         public void SzamlaKiallitas(Foglalas foglalas) { }
         public void FoglalasVisszaigazolas(Foglalas foglalas) { }

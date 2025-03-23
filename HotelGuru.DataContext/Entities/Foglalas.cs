@@ -8,7 +8,7 @@ namespace HotelGuru.DataContext.Entities
 {
     public class Foglalas
     {
-        public int FoglalasId { get; set; }
+        public int Id { get; set; }
         public DateTime FoglalasIdopontja { get; set; }
         public int FoglaltSzobaID { get; set; }
         public bool HitelesBankkartya { get; set; }
