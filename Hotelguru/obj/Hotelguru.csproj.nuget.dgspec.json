@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Egyetem\\Rendszerfejlesztés\\HotelGuru\\Hotelguru\\Hotelguru.csproj": {}
+    "C:\\Users\\Olivér\\Source\\Repos\\HotelGuru\\Hotelguru\\Hotelguru.csproj": {}
   },
   "projects": {
-    "D:\\Egyetem\\Rendszerfejlesztés\\HotelGuru\\Hotelguru\\Hotelguru.csproj": {
+    "C:\\Users\\Olivér\\Source\\Repos\\HotelGuru\\Hotelguru\\Hotelguru.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Egyetem\\Rendszerfejlesztés\\HotelGuru\\Hotelguru\\Hotelguru.csproj",
+        "projectUniqueName": "C:\\Users\\Olivér\\Source\\Repos\\HotelGuru\\Hotelguru\\Hotelguru.csproj",
         "projectName": "Hotelguru",
-        "projectPath": "D:\\Egyetem\\Rendszerfejlesztés\\HotelGuru\\Hotelguru\\Hotelguru.csproj",
-        "packagesPath": "C:\\Users\\laci1\\.nuget\\packages\\",
-        "outputPath": "D:\\Egyetem\\Rendszerfejlesztés\\HotelGuru\\Hotelguru\\obj\\",
+        "projectPath": "C:\\Users\\Olivér\\Source\\Repos\\HotelGuru\\Hotelguru\\Hotelguru.csproj",
+        "packagesPath": "C:\\Users\\Olivér\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Olivér\\Source\\Repos\\HotelGuru\\Hotelguru\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\laci1\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Olivér\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,7 +22,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -44,34 +39,11 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.200"
+        }
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "dependencies": {
-            "Microsoft.AspNetCore.OpenApi": {
-              "target": "Package",
-              "version": "[9.0.3, )"
-            },
-            "Microsoft.EntityFrameworkCore.Design": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[9.0.3, )"
-            },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
-              "target": "Package",
-              "version": "[9.0.3, )"
-            },
-            "Microsoft.EntityFrameworkCore.Tools": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[9.0.3, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",
@@ -83,15 +55,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
