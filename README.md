@@ -6,8 +6,8 @@ TODO:
 - személyes adatok módosítása (UPDATE)
 - plusz szolgáltatás megrendelése (UPDATE)
 # Szoba kontrollerben
-- szobák foglaltak-e
-- szobaadatok módosítása
+// - szobák foglaltak-e
+// - szobaadatok módosítása
 # Recepciós kontrollerben
 - szobafoglalás visszaigazolása
 - beléptetés
