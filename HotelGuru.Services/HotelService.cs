@@ -15,7 +15,7 @@ namespace HotelGuru.Services
     {
         public AppDbContext dbContext;
 
-        public Task<int> Create()
+        public async Task<int> Create()
         {
             throw new NotImplementedException();
         }
