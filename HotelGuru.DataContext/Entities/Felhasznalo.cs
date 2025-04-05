@@ -6,8 +6,17 @@ using System.Threading.Tasks;
 
 namespace HotelGuru.DataContext.Entities
 {
+    public enum szerep
+    {
+        vendég,
+        recepciós,
+        admin
+    }
+
+
     public abstract class Felhasznalo
     {
+
 
         public int Id { get; set; }
         public string Nev { get; set; }
@@ -15,6 +24,9 @@ namespace HotelGuru.DataContext.Entities
         public string Lakcim { get; set; }
         public int Telefonszam { get; set; }
         public int Bankkartya { get; set; }
+        public string jelszo {  get; set; }
+
+        public szerep szerep { get; set; }
 
         public void Bejelentkezes() { }
         public void Kijelentkezes() { }
