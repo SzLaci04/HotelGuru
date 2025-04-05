@@ -11,7 +11,9 @@ namespace HotelGuru.DataContext.Dtos
     { 
         public int Id { get; set; } 
         public int AgyakSzama { get; set; } 
-        public int EjszakaAr { get; set; } 
+        public int EjszakaAr { get; set; }
+        public string Statusz { get; set; }
+        public string Felszereltseg { get; set; }
     }
 
     public class SzobaCreateDto
@@ -20,10 +22,16 @@ namespace HotelGuru.DataContext.Dtos
         public int AgyakSzama { get; set; }
         [Required]
         public int EjszakaAr { get; set; }
+        [Required]
+        public string Statusz { get; set; }
+        [Required]
+        public string Felszereltseg { get; set; }
     }
     public class SzobaUpdateDto
     {
         public int AgyakSzama { get; set; }
         public int EjszakaAr { get; set; }
+        public string Statusz { get; set; }
+        public string Felszereltseg { get; set; }
     }
 }

@@ -15,6 +15,7 @@ namespace HotelGuru.Services
     {
         Task<IEnumerable<SzobaDto>> GetAllSzobaAsync();
         Task<SzobaDto> GetSzobaByIdAsync(int id);
+        Task<IEnumerable<SzobaDto>> GetAvailableSzobakAsync();
         Task<SzobaDto> AddSzobaAsync(SzobaCreateDto szobaDto);
         Task<SzobaDto> UpdateSzobaAsync(int id,SzobaUpdateDto szobaDto);
         Task<bool> DeleteSzobaAsync(int id);
@@ -78,6 +79,12 @@ namespace HotelGuru.Services
             dbContext.Szobak.Remove(szoba);
             await dbContext.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<IEnumerable<SzobaDto>> GetAvailableSzobakAsync()
+        {
+            var szobak = await dbContext.Szobak.Where(s => s.Statusz == SzobaStatusz.Elérhető).ToListAsync();
+            return _mapper.Map<IEnumerable<SzobaDto>>(szobak);
         }
     }
 }

@@ -34,6 +34,13 @@ namespace HotelGuru.Controllers
             var szoba = await _szobaService.GetSzobaByIdAsync(id);
             return Ok(szoba);
         }
+        [HttpGet]
+        [Route("api/[controller]/avialable")]
+        public async Task<IActionResult> GetAvailableSzobak()
+        {
+            var szobak = await _szobaService.GetAvailableSzobakAsync();
+            return Ok(szobak);
+        }
         [HttpPost]
         public async Task<IActionResult> AddSzoba([FromBody] SzobaCreateDto szobaDto)
         {
