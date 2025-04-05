@@ -1,23 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\dani\\Desktop\\aa\\Hotelguru\\HotelGuru.csproj": {}
+    "C:\\Users\\Lakos\\source\\repos\\0405\\Hotelguru\\HotelGuru.csproj": {}
   },
   "projects": {
-    "C:\\Users\\dani\\Desktop\\aa\\HotelGuru.DataContext\\HotelGuru.DataContext.csproj": {
+    "C:\\Users\\Lakos\\source\\repos\\0405\\HotelGuru.DataContext\\HotelGuru.DataContext.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dani\\Desktop\\aa\\HotelGuru.DataContext\\HotelGuru.DataContext.csproj",
+        "projectUniqueName": "C:\\Users\\Lakos\\source\\repos\\0405\\HotelGuru.DataContext\\HotelGuru.DataContext.csproj",
         "projectName": "HotelGuru.DataContext",
-        "projectPath": "C:\\Users\\dani\\Desktop\\aa\\HotelGuru.DataContext\\HotelGuru.DataContext.csproj",
-        "packagesPath": "C:\\Users\\dani\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dani\\Desktop\\aa\\HotelGuru.DataContext\\obj\\",
+        "projectPath": "C:\\Users\\Lakos\\source\\repos\\0405\\HotelGuru.DataContext\\HotelGuru.DataContext.csproj",
+        "packagesPath": "C:\\Users\\Lakos\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Lakos\\source\\repos\\0405\\HotelGuru.DataContext\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\dani\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Lakos\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -103,34 +104,39 @@
         }
       }
     },
-    "C:\\Users\\dani\\Desktop\\aa\\HotelGuru.Services\\HotelGuru.Services.csproj": {
+    "C:\\Users\\Lakos\\source\\repos\\0405\\HotelGuru.Services\\HotelGuru.Services.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dani\\Desktop\\aa\\HotelGuru.Services\\HotelGuru.Services.csproj",
+        "projectUniqueName": "C:\\Users\\Lakos\\source\\repos\\0405\\HotelGuru.Services\\HotelGuru.Services.csproj",
         "projectName": "HotelGuru.Services",
-        "projectPath": "C:\\Users\\dani\\Desktop\\aa\\HotelGuru.Services\\HotelGuru.Services.csproj",
-        "packagesPath": "C:\\Users\\dani\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dani\\Desktop\\aa\\HotelGuru.Services\\obj\\",
+        "projectPath": "C:\\Users\\Lakos\\source\\repos\\0405\\HotelGuru.Services\\HotelGuru.Services.csproj",
+        "packagesPath": "C:\\Users\\Lakos\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Lakos\\source\\repos\\0405\\HotelGuru.Services\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\dani\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Lakos\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net8.0"
+          "net9.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
-            "projectReferences": {}
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "C:\\Users\\Lakos\\source\\repos\\0405\\HotelGuru.DataContext\\HotelGuru.DataContext.csproj": {
+                "projectPath": "C:\\Users\\Lakos\\source\\repos\\0405\\HotelGuru.DataContext\\HotelGuru.DataContext.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -146,8 +152,8 @@
         "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
+        "net9.0": {
+          "targetAlias": "net9.0",
           "dependencies": {
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -202,20 +208,21 @@
         }
       }
     },
-    "C:\\Users\\dani\\Desktop\\aa\\Hotelguru\\HotelGuru.csproj": {
+    "C:\\Users\\Lakos\\source\\repos\\0405\\Hotelguru\\HotelGuru.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dani\\Desktop\\aa\\Hotelguru\\HotelGuru.csproj",
+        "projectUniqueName": "C:\\Users\\Lakos\\source\\repos\\0405\\Hotelguru\\HotelGuru.csproj",
         "projectName": "HotelGuru",
-        "projectPath": "C:\\Users\\dani\\Desktop\\aa\\Hotelguru\\HotelGuru.csproj",
-        "packagesPath": "C:\\Users\\dani\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dani\\Desktop\\aa\\Hotelguru\\obj\\",
+        "projectPath": "C:\\Users\\Lakos\\source\\repos\\0405\\Hotelguru\\HotelGuru.csproj",
+        "packagesPath": "C:\\Users\\Lakos\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Lakos\\source\\repos\\0405\\Hotelguru\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\dani\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Lakos\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -230,11 +237,11 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\dani\\Desktop\\aa\\HotelGuru.DataContext\\HotelGuru.DataContext.csproj": {
-                "projectPath": "C:\\Users\\dani\\Desktop\\aa\\HotelGuru.DataContext\\HotelGuru.DataContext.csproj"
+              "C:\\Users\\Lakos\\source\\repos\\0405\\HotelGuru.DataContext\\HotelGuru.DataContext.csproj": {
+                "projectPath": "C:\\Users\\Lakos\\source\\repos\\0405\\HotelGuru.DataContext\\HotelGuru.DataContext.csproj"
               },
-              "C:\\Users\\dani\\Desktop\\aa\\HotelGuru.Services\\HotelGuru.Services.csproj": {
-                "projectPath": "C:\\Users\\dani\\Desktop\\aa\\HotelGuru.Services\\HotelGuru.Services.csproj"
+              "C:\\Users\\Lakos\\source\\repos\\0405\\HotelGuru.Services\\HotelGuru.Services.csproj": {
+                "projectPath": "C:\\Users\\Lakos\\source\\repos\\0405\\HotelGuru.Services\\HotelGuru.Services.csproj"
               }
             }
           }
