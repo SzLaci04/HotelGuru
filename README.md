@@ -22,8 +22,8 @@ TODO:
 
 # Milyen mezővel kell kibővíteni az entitásokat?
 # Felhasználó
-- jelszó
-- szerep (vendég, recepciós, admin)
+// - jelszó
+// - szerep (vendég, recepciós, admin)
 # Foglalás
 - visszaigazolt-e
 - lemondott-e
@@ -32,5 +32,5 @@ TODO:
 - hány napot foglalt
 - foglalt szobák id-je
 # Szoba
-- foglalható-e
-- felszereltség
+// - foglalható-e
+// - felszereltség
