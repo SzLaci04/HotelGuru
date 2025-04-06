@@ -17,6 +17,9 @@ namespace HotelGuru.DataContext.Context
         public DbSet<Felhasznalo> Felhasznalok { get; set; }
         public DbSet<Foglalas> Foglalasok {  get; set; }
 
+        public DbSet<Adminisztrator> Adminisztratorok { get; set; }
+
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     }
 }
