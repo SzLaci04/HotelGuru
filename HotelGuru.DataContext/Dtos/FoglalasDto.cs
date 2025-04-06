@@ -11,6 +11,12 @@ namespace HotelGuru.DataContext.Dtos
         public int Id { get; set; }
         public DateTime FoglalasIdopontja { get; set; }
         public int FoglaltSzobaId { get; set; } 
-        public bool HitelesBankkartya { get; set; } 
+        public bool HitelesBankkartya { get; set; }
+
+        public DateTime Erkezes { get; set; }
+        public DateTime Tavozas { get; set; }
+        public int FoSzam { get; set; }
+        public bool Visszaigazolva { get; set; }
+        public bool Belepve { get; set; }
     }
 }
