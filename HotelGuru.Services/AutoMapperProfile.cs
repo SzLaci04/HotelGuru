@@ -18,7 +18,8 @@ namespace HotelGuru.Services
             CreateMap<AdminisztratorCreateDto, Adminisztrator>();
             CreateMap<AdminisztratorUpdateDto, Adminisztrator>();
 
-
+            //Felhasználó mapping
+            CreateMap<Felhasznalo, RegisztraltFelhasznaloDto>().ReverseMap();
         }
     }
 }

@@ -5237,23 +5237,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\dani\\.nuget\\packages\\": {},
+    "C:\\Users\\Olivér\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\dani\\Desktop\\aa\\Hotelguru\\HotelGuru.csproj",
+      "projectUniqueName": "C:\\Users\\Olivér\\Source\\Repos\\HotelGuru\\Hotelguru\\HotelGuru.csproj",
       "projectName": "HotelGuru",
-      "projectPath": "C:\\Users\\dani\\Desktop\\aa\\Hotelguru\\HotelGuru.csproj",
-      "packagesPath": "C:\\Users\\dani\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\dani\\Desktop\\aa\\Hotelguru\\obj\\",
+      "projectPath": "C:\\Users\\Olivér\\Source\\Repos\\HotelGuru\\Hotelguru\\HotelGuru.csproj",
+      "packagesPath": "C:\\Users\\Olivér\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Olivér\\Source\\Repos\\HotelGuru\\Hotelguru\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\dani\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Olivér\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -5268,11 +5268,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\dani\\Desktop\\aa\\HotelGuru.DataContext\\HotelGuru.DataContext.csproj": {
-              "projectPath": "C:\\Users\\dani\\Desktop\\aa\\HotelGuru.DataContext\\HotelGuru.DataContext.csproj"
+            "C:\\Users\\Olivér\\Source\\Repos\\HotelGuru\\HotelGuru.DataContext\\HotelGuru.DataContext.csproj": {
+              "projectPath": "C:\\Users\\Olivér\\Source\\Repos\\HotelGuru\\HotelGuru.DataContext\\HotelGuru.DataContext.csproj"
             },
-            "C:\\Users\\dani\\Desktop\\aa\\HotelGuru.Services\\HotelGuru.Services.csproj": {
-              "projectPath": "C:\\Users\\dani\\Desktop\\aa\\HotelGuru.Services\\HotelGuru.Services.csproj"
+            "C:\\Users\\Olivér\\Source\\Repos\\HotelGuru\\HotelGuru.Services\\HotelGuru.Services.csproj": {
+              "projectPath": "C:\\Users\\Olivér\\Source\\Repos\\HotelGuru\\HotelGuru.Services\\HotelGuru.Services.csproj"
             }
           }
         }

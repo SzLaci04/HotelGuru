@@ -18,6 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<ISzobaService, SzobaService>();
 builder.Services.AddScoped<IAdminisztratorService, AdminisztratorService>();
+builder.Services.AddScoped<IFelhasznaloService, FelhasznaloService>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Services.AddEndpointsApiExplorer();
