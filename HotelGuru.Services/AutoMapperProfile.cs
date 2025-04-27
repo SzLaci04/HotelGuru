@@ -20,6 +20,9 @@ namespace HotelGuru.Services
 
             //Felhasználó mapping
             CreateMap<Felhasznalo, RegisztraltFelhasznaloDto>().ReverseMap();
+            CreateMap<RegisztralFelhasznaloDto, Felhasznalo>();
+            CreateMap<FelhasznaloUpdateDto, Felhasznalo>();
+            CreateMap<RegisztralFelhasznaloDto, RegisztraltFelhasznaloDto>();
 
             //Foglalás mapping
             CreateMap<Foglalas, FoglalasDto>().ReverseMap();

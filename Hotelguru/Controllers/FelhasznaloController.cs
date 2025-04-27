@@ -42,11 +42,18 @@ namespace HotelGuru.Controllers
         /// <summary>
         /// Új felhasználó regisztrációja
         /// </summary>
-        [HttpPost]
-        public async Task<IActionResult> AddFelhasznalo([FromBody] RegisztraltFelhasznaloDto felhasznaloDto)
+        [HttpPost("regisztral")]
+        public async Task<IActionResult> RegisztrcioFelhasznalo([FromBody] RegisztralFelhasznaloDto felhasznaloDto)
         {
-            var felhasznalo = await _felhasznaloService.AddFelhasznaloAsync(felhasznaloDto);
+            var felhasznalo = await _felhasznaloService.RegisztracioAsync(felhasznaloDto);
             return CreatedAtAction(nameof(GetFelhasznalo), new { id = felhasznalo.Id }, felhasznalo);
+        }
+
+        [HttpPost("bejelentkez")]
+        public async Task<IActionResult> Bejelentkezes([FromBody] FelhasznaloLoginDto felhasznaloLoginDto)
+        {
+            var token = await _felhasznaloService.BejelentkezesAsync(felhasznaloLoginDto);
+            return Ok(token);
         }
 
         /// <summary>

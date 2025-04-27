@@ -14,7 +14,7 @@ namespace HotelGuru.DataContext.Entities
     }
 
 
-    public abstract class Felhasznalo
+    public class Felhasznalo
     {
 
 
@@ -22,8 +22,8 @@ namespace HotelGuru.DataContext.Entities
         public string Nev { get; set; }
         public string Email { get; set; }
         public string Lakcim { get; set; }
-        public int Telefonszam { get; set; }
-        public int Bankkartya { get; set; }
+        public string Telefonszam { get; set; }
+        public string Bankkartya { get; set; }
         public string jelszo {  get; set; }
 
         public szerep szerep { get; set; }

@@ -16,8 +16,8 @@ namespace HotelGuru.Services
         Task<RegisztraltFelhasznaloDto> AddFelhasznaloAsync(RegisztraltFelhasznaloDto felhasznaloDto);
         Task<RegisztraltFelhasznaloDto> UpdateFelhasznaloAsync(int id, RegisztraltFelhasznaloDto felhasznaloDto);
         Task<bool> DeleteFelhasznaloAsync(int id);
-        Task<RegisztraltFelhasznaloDto> BejelentkezesAsync(string email, string jelszo);
-        Task<RegisztraltFelhasznaloDto> RegisztracioAsync(RegisztraltFelhasznaloDto felhasznaloDto);
+        Task<string> BejelentkezesAsync(FelhasznaloLoginDto felhasznaloLoginDto);
+        Task<RegisztraltFelhasznaloDto> RegisztracioAsync(RegisztralFelhasznaloDto felhasznaloDto);
         Task<bool> MegrendelesPluszSzolgaltatasAsync(int felhasznaloId, string szolgaltatasNev);
     }
 
@@ -78,16 +78,17 @@ namespace HotelGuru.Services
             return true;
         }
 
-        public async Task<RegisztraltFelhasznaloDto> BejelentkezesAsync(string email, string jelszo)
+        public async Task<string> BejelentkezesAsync(FelhasznaloLoginDto felhasznaloLoginDto)
         {
-            var felhasznalo = await _dbContext.Felhasznalok.FirstOrDefaultAsync(f => f.Email == email && f.jelszo == jelszo);
+
+            var felhasznalo = await _dbContext.Felhasznalok.FirstOrDefaultAsync(f => f.Email == felhasznaloLoginDto.Email && f.jelszo == felhasznaloLoginDto.Jelszo);
             if (felhasznalo == null)
                 throw new UnauthorizedAccessException("Hibás email vagy jelszó.");
 
-            return _mapper.Map<RegisztraltFelhasznaloDto>(felhasznalo);
+            return "ok";
         }
 
-        public async Task<RegisztraltFelhasznaloDto> RegisztracioAsync(RegisztraltFelhasznaloDto felhasznaloDto)
+        public async Task<RegisztraltFelhasznaloDto> RegisztracioAsync(RegisztralFelhasznaloDto felhasznaloDto)
         {
             var letezo = await _dbContext.Felhasznalok.AnyAsync(f => f.Email == felhasznaloDto.Email);
             if (letezo)
