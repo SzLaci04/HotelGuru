@@ -2,9 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using BCrypt.Net;
 using HotelGuru.DataContext.Context;
 using HotelGuru.DataContext.Dtos;
 using HotelGuru.DataContext.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelGuru.Services
@@ -80,12 +82,12 @@ namespace HotelGuru.Services
 
         public async Task<string> BejelentkezesAsync(FelhasznaloLoginDto felhasznaloLoginDto)
         {
-
-            var felhasznalo = await _dbContext.Felhasznalok.FirstOrDefaultAsync(f => f.Email == felhasznaloLoginDto.Email && f.jelszo == felhasznaloLoginDto.Jelszo);
-            if (felhasznalo == null)
+            var user = await _dbContext.Felhasznalok.FirstOrDefaultAsync(f => f.Email == felhasznaloLoginDto.Email);
+            if (user == null && !BCrypt.Net.BCrypt.Verify(felhasznaloLoginDto.Jelszo, user.jelszo))
                 throw new UnauthorizedAccessException("Hibás email vagy jelszó.");
 
-            return "ok";
+            
+            return await GenerateToken(_mapper.Map<Felhasznalo>(felhasznaloLoginDto));
         }
 
         public async Task<RegisztraltFelhasznaloDto> RegisztracioAsync(RegisztralFelhasznaloDto felhasznaloDto)
@@ -95,6 +97,7 @@ namespace HotelGuru.Services
                 throw new InvalidOperationException("Már létezik felhasználó ezzel az email címmel.");
 
             var felhasznalo = _mapper.Map<Felhasznalo>(felhasznaloDto);
+            felhasznalo.jelszo=BCrypt.Net.BCrypt.HashPassword(felhasznalo.jelszo);
             felhasznalo.szerep = szerep.vendég;
             await _dbContext.Felhasznalok.AddAsync(felhasznalo);
             await _dbContext.SaveChangesAsync();
@@ -111,6 +114,11 @@ namespace HotelGuru.Services
             // Példa célból ezt itt csak logoljuk
             Console.WriteLine($"Szolgáltatás megrendelve: {szolgaltatasNev} a(z) {felhasznaloId} felhasználónak");
             return true;
+        }
+
+        public async Task<string> GenerateToken(Felhasznalo felhasznalo)
+        {
+            return "ok";
         }
     }
 }

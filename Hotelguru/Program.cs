@@ -4,6 +4,9 @@ using HotelGuru.DataContext.Context;
 using HotelGuru.Services;
 using Microsoft.Extensions.Options;
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,7 @@ builder.Services.AddScoped<ISzobaService, SzobaService>();
 builder.Services.AddScoped<IAdminisztratorService, AdminisztratorService>();
 builder.Services.AddScoped<IFelhasznaloService, FelhasznaloService>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -45,6 +49,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
