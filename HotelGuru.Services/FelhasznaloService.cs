@@ -27,11 +27,13 @@ namespace HotelGuru.Services
     {
         private readonly AppDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IJwtService _jwtService; // JWT szolgáltatás hozzáadva
 
-        public FelhasznaloService(AppDbContext dbContext, IMapper mapper)
+        public FelhasznaloService(AppDbContext dbContext, IMapper mapper, IJwtService jwtService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _jwtService = jwtService; // JWT szolgáltatás injektálása
         }
 
         public async Task<IEnumerable<RegisztraltFelhasznaloDto>> GetAllFelhasznaloAsync()
@@ -83,11 +85,13 @@ namespace HotelGuru.Services
         public async Task<string> BejelentkezesAsync(FelhasznaloLoginDto felhasznaloLoginDto)
         {
             var user = await _dbContext.Felhasznalok.FirstOrDefaultAsync(f => f.Email == felhasznaloLoginDto.Email);
-            if (user == null && !BCrypt.Net.BCrypt.Verify(felhasznaloLoginDto.Jelszo, user.jelszo))
+
+            // Ellenőrizzük, hogy a felhasználó létezik-e és a jelszó helyes-e
+            if (user == null || !BCrypt.Net.BCrypt.Verify(felhasznaloLoginDto.Jelszo, user.jelszo))
                 throw new UnauthorizedAccessException("Hibás email vagy jelszó.");
 
-            
-            return await GenerateToken(_mapper.Map<Felhasznalo>(felhasznaloLoginDto));
+            // JWT token generálása
+            return _jwtService.GenerateToken(user);
         }
 
         public async Task<RegisztraltFelhasznaloDto> RegisztracioAsync(RegisztralFelhasznaloDto felhasznaloDto)
@@ -97,7 +101,7 @@ namespace HotelGuru.Services
                 throw new InvalidOperationException("Már létezik felhasználó ezzel az email címmel.");
 
             var felhasznalo = _mapper.Map<Felhasznalo>(felhasznaloDto);
-            felhasznalo.jelszo=BCrypt.Net.BCrypt.HashPassword(felhasznalo.jelszo);
+            felhasznalo.jelszo = BCrypt.Net.BCrypt.HashPassword(felhasznalo.jelszo);
             felhasznalo.szerep = szerep.vendég;
             await _dbContext.Felhasznalok.AddAsync(felhasznalo);
             await _dbContext.SaveChangesAsync();
@@ -116,9 +120,6 @@ namespace HotelGuru.Services
             return true;
         }
 
-        public async Task<string> GenerateToken(Felhasznalo felhasznalo)
-        {
-            return "ok";
-        }
+        // A régi GenerateToken metódus törlésre került, helyette a JwtService-t használjuk
     }
 }
