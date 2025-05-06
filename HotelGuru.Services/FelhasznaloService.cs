@@ -102,7 +102,13 @@ namespace HotelGuru.Services
 
             var felhasznalo = _mapper.Map<Felhasznalo>(felhasznaloDto);
             felhasznalo.jelszo = BCrypt.Net.BCrypt.HashPassword(felhasznalo.jelszo);
-            felhasznalo.szerep = szerep.vendég;
+
+            // Ha a szerepId 0, akkor legyen vendég alapértelmezettként
+            if (felhasznaloDto.SzerepId == 0)
+                felhasznalo.szerep = szerep.vendég;
+            else
+                felhasznalo.szerep = (szerep)felhasznaloDto.SzerepId;
+
             await _dbContext.Felhasznalok.AddAsync(felhasznalo);
             await _dbContext.SaveChangesAsync();
             return _mapper.Map<RegisztraltFelhasznaloDto>(felhasznalo);
