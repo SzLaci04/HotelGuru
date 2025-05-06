@@ -13,6 +13,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
+// CORS beállítása a React alkalmazás számára
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000")
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials();
+        });
+});
+
 // JWT konfiguráció
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 builder.Services.Configure<JwtSettings>(jwtSettings);
@@ -58,7 +71,6 @@ builder.Services.AddSwaggerGen(c =>
         Title = "HotelGuru API",
         Version = "v1"
     });
-
     // JWT autentikáció beállítása Swagger UI-hoz
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -68,7 +80,6 @@ builder.Services.AddSwaggerGen(c =>
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
-
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -83,7 +94,6 @@ builder.Services.AddSwaggerGen(c =>
             new string[] {}
         }
     });
-
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
@@ -96,6 +106,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HotelGuru API v1"));
 }
+
+// CORS engedélyezése - FONTOS: Ez az UseHttpsRedirection() ELÕTT kell legyen
+app.UseCors("AllowReactApp");
 
 app.UseHttpsRedirection();
 
