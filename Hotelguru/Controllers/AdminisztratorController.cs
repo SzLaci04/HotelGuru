@@ -2,16 +2,16 @@
 using HotelGuru.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelGuru.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "admin")] // Csak admin férhet hozzá
     public class AdminisztratorController : ControllerBase
     {
         private readonly IAdminisztratorService _adminService;
-
         public AdminisztratorController(IAdminisztratorService adminService)
         {
             _adminService = adminService;
@@ -51,7 +51,6 @@ namespace HotelGuru.Controllers
             var sikeres = await _adminService.DeleteAsync(id);
             if (sikeres)
                 return NoContent();
-
             return NotFound();
         }
     }

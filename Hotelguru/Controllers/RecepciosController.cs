@@ -1,16 +1,16 @@
 ﻿using HotelGuru.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelGuru.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "recepciós,admin")] // Csak recepciós és admin férhet hozzá
     public class RecepciosController : ControllerBase
     {
-
         private readonly IRecepciosService _recepciosService;
-
         public RecepciosController(IRecepciosService recepciosService)
         {
             _recepciosService = recepciosService;
