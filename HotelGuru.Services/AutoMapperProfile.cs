@@ -27,7 +27,8 @@ namespace HotelGuru.Services
 
             //Foglalás mapping
             CreateMap<Foglalas, FoglalasDto>().ReverseMap();
-            CreateMap<FoglalasCreateDto, Foglalas>();
+            CreateMap<FoglalasCreateDto, Foglalas>()
+                .ForMember(dest => dest.SzobaId, opt => opt.MapFrom(src => src.FoglaltSzobaId));
         }
     }
 }
