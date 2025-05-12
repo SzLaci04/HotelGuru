@@ -1,5 +1,10 @@
 # HotelGuru-15
 TODO:
+Frontendnél
+Szobák betöltése
+Foglalások betöltése
+Főoldal átszerkesztése
+Invoice megtekintés
 # Felhasználó kontrollerben
 // - vendég regisztráció
 // - vendég bejelentkezés
