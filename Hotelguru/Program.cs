@@ -59,6 +59,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<ISzobaService, SzobaService>();
 builder.Services.AddScoped<IAdminisztratorService, AdminisztratorService>();
 builder.Services.AddScoped<IFelhasznaloService, FelhasznaloService>();
+builder.Services.AddScoped<IRecepciosService, RecepciosService>();
 builder.Services.AddScoped<IJwtService, JwtService>(); // JWT szolgáltatás regisztrálása
 builder.Services.AddScoped<IFoglalasService, FoglalasService>();
 builder.Services.AddScoped<IRecepciosService, RecepciosService>();
