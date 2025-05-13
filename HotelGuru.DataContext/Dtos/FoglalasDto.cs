@@ -19,5 +19,6 @@ namespace HotelGuru.DataContext.Dtos
         public bool Visszaigazolva { get; set; }
         public bool Belepve { get; set; }
         public int PluszSzolgId { get; set; }
+        public int FoglaloId { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using HotelGuru.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace HotelGuru.Controllers
 {
@@ -60,6 +61,27 @@ namespace HotelGuru.Controllers
         {
             var foglalas = await _foglalasService.GetFoglalasByIdAsync(id);
             return foglalas != null ? Ok(foglalas) : NotFound();
+        }
+
+        // Hotelguru/Controllers/FoglalasController.cs
+        [HttpGet("sajatFoglalas/{felhasznaloId}")]
+        [Authorize(Roles = "vendég,recepciós,admin")]
+        public async Task<IActionResult> GetFoglalasokByFelhasznaloId(int felhasznaloId)
+        {
+            // Ellenőrizzük, hogy a felhasználó a saját foglalásait kéri-e le
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (userIdClaim != null)
+            {
+                if (int.TryParse(userIdClaim.Value, out var userId) && userId != felhasznaloId && userRole != "admin" && userRole != "recepciós")
+                {
+                    return Forbid("Csak a saját foglalásaidat tekintheted meg, vagy adminisztrációs joggal rendelkező felhasználó vagy!");
+                }
+            }
+
+            var foglalasok = await _foglalasService.GetFoglalasokByFelhasznaloIdAsync(felhasznaloId);
+            return Ok(foglalasok);
         }
     }
 }

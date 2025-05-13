@@ -16,5 +16,6 @@ namespace HotelGuru.DataContext.Dtos
         public DateTime Tavozas { get; set; }
         public int FoSzam { get; set; }
         public int PluszSzolgId { get; set; }
+        public int FoglaloId { get; set; }
     }
 }

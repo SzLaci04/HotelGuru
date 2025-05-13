@@ -23,7 +23,12 @@ namespace HotelGuru.DataContext.Entities
         public Szoba Szoba { get; set; }
         public int SzobaId { get; set; }
 
+
         public int PluszSzolgId { get; set; }
+
+        public int FoglaloId { get; set; }
+        public Felhasznalo Foglalo { get; set; }
+
         public void ExtraSzolgaltatas(string pluszSzolgaltatas) { }
     }
 }

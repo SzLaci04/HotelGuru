@@ -16,6 +16,7 @@ namespace HotelGuru.Services
         Task<bool> LemondFoglalastAsync(int id);
         Task<IEnumerable<FoglalasDto>> GetAllFoglalasAsync();
         Task<FoglalasDto> GetFoglalasByIdAsync(int id);
+        Task<IEnumerable<FoglalasDto>> GetFoglalasokByFelhasznaloIdAsync(int felhasznaloId);
     }
     public class FoglalasService : IFoglalasService
     {
@@ -35,11 +36,17 @@ namespace HotelGuru.Services
             if (szoba == null)
                 throw new KeyNotFoundException($"A {dto.FoglaltSzobaId} ID-val rendelkező szoba nem található.");
 
+            // Ellenőrizzük, hogy a felhasználó létezik-e
+            var felhasznalo = await _context.Felhasznalok.FindAsync(dto.FoglaloId);
+            if (felhasznalo == null)
+                throw new KeyNotFoundException($"A {dto.FoglaloId} ID-val rendelkező felhasználó nem található.");
+
             // Itt használhatod az AutoMapper-t, de manuálisan be kell állítanod a SzobaId-t
             var foglalas = _mapper.Map<Foglalas>(dto);
 
             // Fontos: a SzobaId-t is be kell állítani a FoglaltSzobaId alapján
             foglalas.SzobaId = dto.FoglaltSzobaId;
+            foglalas.FoglaloId = dto.FoglaloId;
 
             // A FoglalasIdopontja-t is beállítjuk, ha a DTO-ban nem volt megadva
             if (foglalas.FoglalasIdopontja == default)
@@ -72,6 +79,16 @@ namespace HotelGuru.Services
         {
             var foglalas = await _context.Foglalasok.FindAsync(id);
             return foglalas == null ? null : _mapper.Map<FoglalasDto>(foglalas);
+        }
+
+        public async Task<IEnumerable<FoglalasDto>> GetFoglalasokByFelhasznaloIdAsync(int felhasznaloId)
+        {
+            var foglalasok = await _context.Foglalasok
+                .Include(f => f.Szoba)
+                .Include(f => f.Foglalo)
+                .Where(f => f.FoglaloId == felhasznaloId)
+                .ToListAsync();
+            return _mapper.Map<IEnumerable<FoglalasDto>>(foglalasok);
         }
     }
 }
