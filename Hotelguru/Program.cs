@@ -17,13 +17,13 @@ builder.Services.AddControllers();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:3000")
-                  .AllowAnyMethod()
-                  .AllowAnyHeader()
-                  .AllowCredentials();
-        });
+    policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+             .AllowAnyMethod()
+             .AllowAnyHeader()
+             .AllowCredentials();
+    });
 });
 
 // JWT konfiguráció
@@ -61,6 +61,7 @@ builder.Services.AddScoped<IAdminisztratorService, AdminisztratorService>();
 builder.Services.AddScoped<IFelhasznaloService, FelhasznaloService>();
 builder.Services.AddScoped<IJwtService, JwtService>(); // JWT szolgáltatás regisztrálása
 builder.Services.AddScoped<IFoglalasService, FoglalasService>();
+builder.Services.AddScoped<IRecepciosService, RecepciosService>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddEndpointsApiExplorer();
 
@@ -118,6 +119,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Ellenõrizd, hogy ez a rész helyesen van beállítva
+app.UseCors("AllowReactApp");
 
 using (var scope = app.Services.CreateScope())
 {
