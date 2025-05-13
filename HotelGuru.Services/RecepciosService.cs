@@ -46,10 +46,11 @@ namespace HotelGuru.Services
         {
             var foglalas = await _context.Foglalasok.Include(f => f.Szoba).FirstOrDefaultAsync(f => f.Id == foglalasId);
             if (foglalas == null) return null;
-
+            var pluszszolg = await _context.PluszSzolgaltatasok.FindAsync(foglalas.PluszSzolgId);
             var napok = (foglalas.Tavozas - foglalas.Erkezes).Days;
-            var osszeg = napok * foglalas.Szoba.EjszakaAr * (foglalas.FoSzam > 0 ? foglalas.FoSzam : 1);
-            return $"Számla #{foglalas.Id} - Összeg: {osszeg} Ft, Szoba: {foglalas.Szoba.ID}, Dátum: {foglalas.Erkezes:yyyy.MM.dd} - {foglalas.Tavozas:yyyy.MM.dd}";
+            var osszeg = pluszszolg.SzolgaltatasAra + (napok * foglalas.Szoba.EjszakaAr * (foglalas.FoSzam > 0 ? foglalas.FoSzam : 1));
+            return $"Számla #{foglalas.Id} - Összeg: {osszeg} Ft, Szoba: {foglalas.Szoba.ID},Fő: {foglalas.FoSzam}, Dátum: {foglalas.Erkezes:yyyy.MM.dd} - {foglalas.Tavozas:yyyy.MM.dd}, Plusz szolgáltatás ára: {pluszszolg.SzolgaltatasAra}, ";
+            ;
         }
     }
 }

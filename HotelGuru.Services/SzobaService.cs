@@ -17,15 +17,16 @@ namespace HotelGuru.Services
         Task<SzobaDto> GetSzobaByIdAsync(int id);
         Task<IEnumerable<SzobaDto>> GetAvailableSzobakAsync();
         Task<SzobaDto> AddSzobaAsync(SzobaCreateDto szobaDto);
-        Task<SzobaDto> UpdateSzobaAsync(int id,SzobaUpdateDto szobaDto);
+        Task<SzobaDto> UpdateSzobaAsync(int id, SzobaUpdateDto szobaDto);
         Task<bool> DeleteSzobaAsync(int id);
+        Task<IEnumerable<PluszSzolgaltatasDto>> GetAllPluszSzolgAsync();
     }
-    public class SzobaService:ISzobaService
+    public class SzobaService : ISzobaService
     {
         public AppDbContext dbContext;
         private readonly IMapper _mapper;
 
-        public SzobaService(AppDbContext context,IMapper mapper) 
+        public SzobaService(AppDbContext context, IMapper mapper)
         {
             dbContext = context;
             _mapper = mapper;
@@ -33,7 +34,7 @@ namespace HotelGuru.Services
         public async Task<IEnumerable<SzobaDto>> GetAllSzobaAsync()
         {
             var szobak = await dbContext.Szobak.ToListAsync();
-            
+
             return _mapper.Map<IEnumerable<SzobaDto>>(szobak);
         }
         public async Task<SzobaDto> GetSzobaByIdAsync(int id)
@@ -48,13 +49,13 @@ namespace HotelGuru.Services
 
         public async Task<SzobaDto> AddSzobaAsync(SzobaCreateDto szobaDto)
         {
-            var szoba =  _mapper.Map<Szoba>(szobaDto);
+            var szoba = _mapper.Map<Szoba>(szobaDto);
             await dbContext.Szobak.AddAsync(szoba);
             await dbContext.SaveChangesAsync();
             return _mapper.Map<SzobaDto>(szoba);
         }
 
-        public async Task<SzobaDto> UpdateSzobaAsync(int id,SzobaUpdateDto szobaDto)
+        public async Task<SzobaDto> UpdateSzobaAsync(int id, SzobaUpdateDto szobaDto)
         {
             var szoba = await dbContext.Szobak.FindAsync(id);
             if (szoba == null)
@@ -85,6 +86,12 @@ namespace HotelGuru.Services
         {
             var szobak = await dbContext.Szobak.Where(s => s.Statusz == SzobaStatusz.Elérhető).ToListAsync();
             return _mapper.Map<IEnumerable<SzobaDto>>(szobak);
+        }
+
+        public async Task<IEnumerable<PluszSzolgaltatasDto>> GetAllPluszSzolgAsync()
+        {
+            var plusszolg = await dbContext.PluszSzolgaltatasok.ToListAsync();
+            return _mapper.Map<IEnumerable<PluszSzolgaltatasDto>>(plusszolg);
         }
     }
 }

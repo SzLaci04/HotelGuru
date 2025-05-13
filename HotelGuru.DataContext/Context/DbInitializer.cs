@@ -65,6 +65,7 @@ namespace HotelGuru.DataContext
                 // Plusz szolgáltatások
                 var szolgaltatasok = new PluszSzolgaltatas[]
                 {
+                    new PluszSzolgaltatas { SzolgaltatasNeve="Semmi", SzolgaltatasLeiras="Semmi", SzolgaltatasAra = 0 },
                     new PluszSzolgaltatas { SzolgaltatasNeve = "Reggeli", SzolgaltatasLeiras = "Svédasztalos reggeli 7-10 óra között", SzolgaltatasAra = 3000 },
                     new PluszSzolgaltatas { SzolgaltatasNeve = "Parkolás", SzolgaltatasLeiras = "Zárt parkoló használata", SzolgaltatasAra = 2000 },
                     new PluszSzolgaltatas { SzolgaltatasNeve = "Szauna", SzolgaltatasLeiras = "Szauna használat 2 óra", SzolgaltatasAra = 5000 }

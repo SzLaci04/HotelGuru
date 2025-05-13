@@ -88,5 +88,15 @@ namespace HotelGuru.Controllers
                 return NoContent();
             return NotFound();
         }
+        /// <summary>
+        /// Összes plusz szolgáltatás kiírása
+        /// </summary>
+        [HttpGet("pluszszolg")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPluszSzolg()
+        {
+            var szolgaltatasok = await _szobaService.GetAllPluszSzolgAsync();
+            return Ok(szolgaltatasok);
+        }
     }
 }
