@@ -119,4 +119,21 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        // Mivel a DbInitializer a Context mappában van
+        HotelGuru.DataContext.DbInitializer.Initialize(services);
+        Console.WriteLine("Database initialized successfully.");
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Hiba történt az adatbázis inicializálása során.");
+        Console.WriteLine($"Database initialization error: {ex.Message}");
+    }
+}
+
 app.Run();
