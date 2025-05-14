@@ -5,30 +5,12 @@ import { useAuth } from '../contexts/AuthContext';
 
 const InvoiceViewer = () => {
   const { invoiceId } = useParams();
-  const { isAuthenticated, isStaff } = useAuth();
+  const { isAuthenticated, userRole } = useAuth();
   const navigate = useNavigate();
   const [invoice, setInvoice] = useState(null);
   const [booking, setBooking] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
-  // JWT token dekódolása UTF-8 támogatással
-  const decodeJWT = (token) => {
-    try {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-          .join('')
-      );
-      return JSON.parse(jsonPayload);
-    } catch (e) {
-      console.error('Token dekódolási hiba:', e);
-      return null;
-    }
-  };
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -46,35 +28,15 @@ const InvoiceViewer = () => {
           throw new Error("Nincs bejelentkezve vagy nincs megfelelő jogosultsága!");
         }
         
-        // Számla lekérése
-        const invoiceResponse = await fetch(`https://localhost:5079/api/Felhasznalo/sajatSzamlak`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        });
+        console.log(`Számla lekérése, ID: ${invoiceId}, User Role: ${userRole}`);
+
+        // Számla lekérése közvetlenül az ID alapján
+        // Admin és recepciós az összes számlát láthatja, vendég csak a sajátjait
+        let invoiceData;
         
-        if (!invoiceResponse.ok) {
-          const errorText = await invoiceResponse.text();
-          throw new Error(`HTTP hiba a számlák lekérésekor: ${invoiceResponse.status} - ${errorText}`);
-        }
-        
-        const invoicesData = await invoiceResponse.json();
-        console.log("Összes számla:", invoicesData);
-        
-        // Keressük meg a kívánt számlát az ID alapján
-        const selectedInvoice = invoicesData.find(inv => inv.id === parseInt(invoiceId));
-        if (!selectedInvoice) {
-          throw new Error(`Nem található a ${invoiceId} azonosítójú számla.`);
-        }
-        
-        console.log("Kiválasztott számla:", selectedInvoice);
-        setInvoice(selectedInvoice);
-        
-        // Ha sikerült lekérni a számlát, lekérjük a foglalást is
-        if (selectedInvoice && selectedInvoice.foglalasId) {
-          const bookingResponse = await fetch(`https://localhost:5079/api/Foglalas/${selectedInvoice.foglalasId}`, {
+        // Admin, recepciós esetén közvetlen ID alapú lekérés
+        if (userRole === 'admin' || userRole === 'recepciós' || userRole === 'recepcios') {
+          const response = await fetch(`https://localhost:5079/api/Recepcios/szamlak`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -82,23 +44,72 @@ const InvoiceViewer = () => {
             }
           });
           
-          if (bookingResponse.ok) {
-            const bookingData = await bookingResponse.json();
-            console.log("Foglalás adatai:", bookingData);
-            setBooking(bookingData);
-          } else {
-            console.warn("Nem sikerült lekérni a foglalás adatait");
+          if (!response.ok) {
+            throw new Error(`Számlák lekérése sikertelen: ${response.status}`);
+          }
+          
+          const allInvoices = await response.json();
+          console.log("Összes számla:", allInvoices);
+          
+          // Keressük meg a számlát ID alapján
+          invoiceData = allInvoices.find(inv => inv && inv.id === parseInt(invoiceId));
+        } else {
+          // Vendég esetén saját számlák lekérése
+          const response = await fetch(`https://localhost:5079/api/Felhasznalo/sajatSzamlak`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          
+          if (!response.ok) {
+            throw new Error(`Saját számlák lekérése sikertelen: ${response.status}`);
+          }
+          
+          const myInvoices = await response.json();
+          invoiceData = myInvoices.find(inv => inv && inv.id === parseInt(invoiceId));
+        }
+        
+        if (!invoiceData) {
+          throw new Error(`Nem található a ${invoiceId} azonosítójú számla.`);
+        }
+        
+        console.log("Megtalált számla:", invoiceData);
+        setInvoice(invoiceData);
+        
+        // Foglalás adatok lekérése
+        if (invoiceData.foglalasId) {
+          try {
+            const bookingResponse = await fetch(`https://localhost:5079/api/Foglalas/${invoiceData.foglalasId}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              }
+            });
+            
+            if (bookingResponse.ok) {
+              const bookingData = await bookingResponse.json();
+              console.log("Foglalás adatai:", bookingData);
+              setBooking(bookingData);
+            } else {
+              console.warn("Foglalás adatok lekérése sikertelen:", bookingResponse.status);
+            }
+          } catch (bookingErr) {
+            console.error("Hiba a foglalás lekérésekor:", bookingErr);
           }
         }
       } catch (err) {
         console.error('Számla betöltési hiba:', err);
-        setError('Nem sikerült betölteni a számlát: ' + err.message);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
+    
     fetchInvoiceData();
-  }, [invoiceId, navigate, isAuthenticated]);
+  }, [invoiceId, navigate, isAuthenticated, userRole]);
 
   // Segédfüggvény a dátum formázásához
   const formatDate = (dateString) => {
@@ -113,6 +124,7 @@ const InvoiceViewer = () => {
 
   // Pénzösszeg formázása
   const formatCurrency = (amount) => {
+    if (amount === undefined || amount === null) return 'N/A';
     return new Intl.NumberFormat('hu-HU', {
       style: 'currency',
       currency: 'HUF',
@@ -139,15 +151,16 @@ const InvoiceViewer = () => {
     );
   }
 
-  if (!invoice || !booking) {
+  if (!invoice) {
     return (
       <div className="container mt-5">
-        <div className="alert alert-warning">A számla vagy a foglalás nem található.</div>
+        <div className="alert alert-warning">A számla nem található.</div>
         <button className="btn btn-primary" onClick={() => navigate(-1)}>Vissza</button>
       </div>
     );
   }
 
+  // Számla megjelenítés
   return (
     <div className="container mt-5">
       <div className="card">
@@ -172,20 +185,28 @@ const InvoiceViewer = () => {
           
           <hr className="my-4" />
           
-          <div className="row mb-4">
-            <div className="col-md-6">
-              <h5 className="mb-3">Vendég foglalási szándékai</h5>
-              <p className="mb-1"><strong>Érkezés:</strong> {formatDate(booking.erkezes)}</p>
-              <p className="mb-1"><strong>Távozás:</strong> {formatDate(booking.tavozas)}</p>
-              <p className="mb-1"><strong>Személyek száma:</strong> {booking.foSzam} fő</p>
+          {booking ? (
+            <>
+              <div className="row mb-4">
+                <div className="col-md-6">
+                  <h5 className="mb-3">Vendég foglalási szándékai</h5>
+                  <p className="mb-1"><strong>Érkezés:</strong> {formatDate(booking.erkezes)}</p>
+                  <p className="mb-1"><strong>Távozás:</strong> {formatDate(booking.tavozas)}</p>
+                  <p className="mb-1"><strong>Személyek száma:</strong> {booking.foSzam} fő</p>
+                </div>
+                <div className="col-md-6">
+                  <h5 className="mb-3">Szállás adatok</h5>
+                  <p className="mb-1"><strong>Szoba:</strong> {booking.foglaltSzobaId}. szoba</p>
+                  <p className="mb-1"><strong>Éjszakák száma:</strong> {Math.max(1, Math.ceil((new Date(booking.tavozas) - new Date(booking.erkezes)) / (1000 * 60 * 60 * 24)))} éj</p>
+                  <p className="mb-1"><strong>Plusz szolgáltatás:</strong> {booking.pluszSzolgId}. számú szolgáltatás</p>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="alert alert-warning">
+              A foglalás részletei nem elérhetők.
             </div>
-            <div className="col-md-6">
-              <h5 className="mb-3">Szállás adatok</h5>
-              <p className="mb-1"><strong>Szoba:</strong> {booking.foglaltSzobaId}. szoba</p>
-              <p className="mb-1"><strong>Éjszakák száma:</strong> {Math.ceil((new Date(booking.tavozas) - new Date(booking.erkezes)) / (1000 * 60 * 60 * 24))} éj</p>
-              <p className="mb-1"><strong>Plusz szolgáltatás:</strong> {booking.pluszSzolgId}. számú szolgáltatás</p>
-            </div>
-          </div>
+          )}
           
           <hr className="my-4" />
           

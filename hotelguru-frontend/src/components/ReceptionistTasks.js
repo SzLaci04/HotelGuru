@@ -255,42 +255,43 @@ useEffect(() => {
     
     console.log(`Számla készítése a(z) ${foglalasId} foglaláshoz...`);
     
-    // Ide kerül a megfelelő URL a számla létrehozásához
+    // Ellenőrizzük, hogy a hívás megfelelő formátumban történik
+    const requestData = { foglalasId: parseInt(foglalasId) };
+    console.log("Küldött adatok:", JSON.stringify(requestData));
+    
     const response = await fetch(`https://localhost:5079/api/Recepcios/szamlaAllitas`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify({ foglalasId })
+      body: JSON.stringify(requestData)
     });
     
+    // Teljes válasz kiírása a konzolra
+    const responseText = await response.text();
+    console.log(`Válasz (${response.status}):`, responseText);
+    
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`HTTP hiba: ${response.status} - ${errorText}`);
+      throw new Error(`HTTP hiba: ${response.status} - ${responseText}`);
     }
     
-    // Kinyerjük a létrehozott számla adatait
-    const invoiceData = await response.json();
+    // Próbáljuk meg a válasz szöveget JSON-ként értelmezni
+    let invoiceData;
+    try {
+      invoiceData = JSON.parse(responseText);
+    } catch (e) {
+      console.error("Válasz nem JSON formátumú:", e);
+      throw new Error("A szerver nem JSON formátumú választ küldött");
+    }
+    
     console.log("Számla létrehozva:", invoiceData);
     
     // Frissítsünk minden adatot
     await fetchBookings(); // Foglalások újra lekérése
     await fetchInvoices();  // Számlák újra lekérése
     
-    // Frissítsük a bookings objektumot, hogy tartalmazza a számla ID-t
-    setBookings(prevBookings => 
-      prevBookings.map(booking => 
-        booking.id === foglalasId 
-          ? { ...booking, szamlaId: invoiceData.id } 
-          : booking
-      )
-    );
-    
-    setSuccessMessage(`A ${foglalasId} azonosítójú foglalásról sikeresen elkészült a számla! (Számla ID: ${invoiceData.id})`);
-    
-    // Opcionális: átirányítás a számla megtekintésére
-    // navigate(`/invoice/${invoiceData.id}`);
+    setSuccessMessage(`A ${foglalasId} azonosítójú foglalásról sikeresen elkészült a számla!`);
   } catch (err) {
     console.error('Számla készítési hiba:', err);
     setError('Hiba történt a számla készítése során: ' + err.message);

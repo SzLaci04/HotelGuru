@@ -34,7 +34,11 @@ const InvoiceList = () => {
         
         const data = await response.json();
         console.log("Számlák adatai:", data);
-        setInvoices(data);
+        
+        // Null ellenőrzés: csak a valós számlákat tároljuk
+        // Kiszűrjük a null, undefined értékeket és az olyan elemeket, amiknek nincs id-je
+        const filteredInvoices = data ? data.filter(invoice => invoice && invoice.id) : [];
+        setInvoices(filteredInvoices);
       } catch (err) {
         console.error('Számlák betöltési hiba:', err);
         setError('Nem sikerült betölteni a számlákat: ' + err.message);
@@ -108,9 +112,9 @@ const InvoiceList = () => {
               {invoices.map(invoice => (
                 <tr key={invoice.id}>
                   <td>#{invoice.id}</td>
-                  <td>#{invoice.foglalasId}</td>
+                  <td>#{invoice.foglalasId || 'N/A'}</td>
                   <td>{formatDate(invoice.kiallitasDatum)}</td>
-                  <td>{formatCurrency(invoice.vegsoAr)}</td>
+                  <td>{formatCurrency(invoice.vegsoAr || 0)}</td>
                   <td>
                     <button 
                       className="btn btn-primary btn-sm"

@@ -50,25 +50,44 @@ namespace HotelGuru.Services
 
         public async Task<SzamlaDto> SzamlaKeszitesAsync(SzamlaCreateDto szamlaDto)
         {
-            //var foglalas = await _context.Foglalasok.Include(f => f.Szoba).FirstOrDefaultAsync(f => f.Id == foglalasId);
-            //if (foglalas == null) return null;
-            //var pluszszolg = await _context.PluszSzolgaltatasok.FindAsync(foglalas.PluszSzolgId);
-            //var napok = (foglalas.Tavozas - foglalas.Erkezes).Days;
-            //var osszeg = pluszszolg.SzolgaltatasAra + (napok * foglalas.Szoba.EjszakaAr * (foglalas.FoSzam > 0 ? foglalas.FoSzam : 1));
-            //return $"Számla #{foglalas.Id} - Összeg: {osszeg} Ft, Szoba: {foglalas.Szoba.ID},Fő: {foglalas.FoSzam}, Dátum: {foglalas.Erkezes:yyyy.MM.dd} - {foglalas.Tavozas:yyyy.MM.dd}, Plusz szolgáltatás ára: {pluszszolg.SzolgaltatasAra}, ";
             var foglalas = await _context.Foglalasok.FirstOrDefaultAsync(f => f.Id == szamlaDto.FoglalasId);
             if (foglalas == null)
                 return null;
+
             var szamla = _mapper.Map<Szamla>(szamlaDto);
-            szamla.KiallitasDatum=DateTime.Now;
-            var napok = (foglalas.Tavozas - foglalas.Erkezes).Days;
-            var pluszszolg = await _context.PluszSzolgaltatasok.FirstOrDefaultAsync(f => f.ID == foglalas.Id);
-            var szoba=await _context.Szobak.FirstOrDefaultAsync(f => f.ID==foglalas.SzobaId);
-            szamla.VegsoAr = foglalas.FoSzam * napok * szoba.EjszakaAr+pluszszolg.SzolgaltatasAra;
+            szamla.KiallitasDatum = DateTime.Now;
+
+            // Napok számának kiszámítása
+            var napok = Math.Max(1, (foglalas.Tavozas - foglalas.Erkezes).Days);
+
+            // A helyes PluszSzolgId használata és null-ellenőrzés 
+            var pluszszolg = await _context.PluszSzolgaltatasok.FirstOrDefaultAsync(f => f.ID == foglalas.PluszSzolgId);
+            if (pluszszolg == null)
+            {
+                // Ha nincs meg a plusz szolgáltatás, használjunk egy alapértelmezett árat (0)
+                pluszszolg = new PluszSzolgaltatas { SzolgaltatasAra = 0 };
+            }
+
+            // A helyes SzobaId használata és null-ellenőrzés
+            var szoba = await _context.Szobak.FirstOrDefaultAsync(f => f.ID == foglalas.SzobaId);
+            if (szoba == null)
+            {
+                // Ha nincs meg a szoba, nem tudunk számlát készíteni
+                return null;
+            }
+
+            // Végösszeg kiszámítása
+            szamla.VegsoAr = foglalas.FoSzam * napok * szoba.EjszakaAr + pluszszolg.SzolgaltatasAra;
+
             await _context.Szamlak.AddAsync(szamla);
             await _context.SaveChangesAsync();
-            return _mapper.Map<SzamlaDto>(szamla);
 
+            // Frissítsük a foglalást, hogy tartalmazzon hivatkozást a számlára
+            foglalas.SzamlaId = szamla.Id;
+            _context.Foglalasok.Update(foglalas);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<SzamlaDto>(szamla);
         }
 
         public async Task<IEnumerable<SzamlaDto>> GetAllSzamlaAsync()

@@ -110,6 +110,13 @@ const isReceptionistOrAdmin =
                     </Link>
                   </li>
                 )}
+                {userRole === 'admin' && (
+                <li className="nav-item">
+                  <Link className="nav-link" to="/admin/invoices">
+                    Összes számla
+                  </Link>
+                </li>
+              )}
               </>
             )}
           </ul>

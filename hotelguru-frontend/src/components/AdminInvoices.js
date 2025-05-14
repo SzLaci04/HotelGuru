@@ -28,7 +28,7 @@ const AdminInvoices = () => {
         
         // Párhuzamos lekérések az összes számla és felhasználó adataihoz
         const [invoicesResponse, usersResponse] = await Promise.all([
-          fetch('https://localhost:5079/api/Recepciosok/szamlak', {
+          fetch('https://localhost:5079/api/Recepcios/szamlak', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
