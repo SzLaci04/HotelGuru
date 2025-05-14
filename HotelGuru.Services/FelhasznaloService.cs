@@ -28,13 +28,13 @@ namespace HotelGuru.Services
     {
         private readonly AppDbContext _dbContext;
         private readonly IMapper _mapper;
-        private readonly IJwtService _jwtService; // JWT szolgáltatás hozzáadva
+        private readonly IJwtService _jwtService; 
 
         public FelhasznaloService(AppDbContext dbContext, IMapper mapper, IJwtService jwtService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
-            _jwtService = jwtService; // JWT szolgáltatás injektálása
+            _jwtService = jwtService; 
         }
 
         public async Task<IEnumerable<RegisztraltFelhasznaloDto>> GetAllFelhasznaloAsync()
@@ -87,11 +87,11 @@ namespace HotelGuru.Services
         {
             var user = await _dbContext.Felhasznalok.FirstOrDefaultAsync(f => f.Email == felhasznaloLoginDto.Email);
 
-            // Ellenőrizzük, hogy a felhasználó létezik-e és a jelszó helyes-e
+            
             if (user == null || !BCrypt.Net.BCrypt.Verify(felhasznaloLoginDto.Jelszo, user.jelszo))
                 throw new UnauthorizedAccessException("Hibás email vagy jelszó.");
 
-            // JWT token generálása
+           
             return _jwtService.GenerateToken(user);
         }
 
@@ -104,7 +104,7 @@ namespace HotelGuru.Services
             var felhasznalo = _mapper.Map<Felhasznalo>(felhasznaloDto);
             felhasznalo.jelszo = BCrypt.Net.BCrypt.HashPassword(felhasznalo.jelszo);
 
-            // Ha a szerepId 0, akkor legyen vendég alapértelmezettként
+            
             if (felhasznaloDto.SzerepId == 0)
                 felhasznalo.szerep = szerep.vendég;
             else
@@ -121,8 +121,7 @@ namespace HotelGuru.Services
             if (felhasznalo == null)
                 throw new KeyNotFoundException("Felhasználó nem található a szolgáltatás megrendeléséhez.");
 
-            // Itt a szolgáltatás hozzárendelése történne (pl. új tábla, reláció, vagy JSON mező bővítés)
-            // Példa célból ezt itt csak logoljuk
+            
             Console.WriteLine($"Szolgáltatás megrendelve: {szolgaltatasNev} a(z) {felhasznaloId} felhasználónak");
             return true;
         }
@@ -139,6 +138,6 @@ namespace HotelGuru.Services
             return szamlak!=null?_mapper.Map<IEnumerable<SzamlaDto>>(szamlak) : null;
         }
 
-        // A régi GenerateToken metódus törlésre került, helyette a JwtService-t használjuk
+        
     }
 }

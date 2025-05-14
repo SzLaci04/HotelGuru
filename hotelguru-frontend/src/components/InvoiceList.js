@@ -12,13 +12,13 @@ const InvoiceList = () => {
       try {
         setLoading(true);
         
-        // JWT token kinyerése
+        
         const token = localStorage.getItem('token');
         if (!token) {
           throw new Error("Nincs bejelentkezve vagy nincs megfelelő jogosultsága!");
         }
         
-        // Számlák lekérése
+       
         const response = await fetch('https://localhost:5079/api/Felhasznalo/sajatSzamlak', {
           method: 'GET',
           headers: {
@@ -35,8 +35,7 @@ const InvoiceList = () => {
         const data = await response.json();
         console.log("Számlák adatai:", data);
         
-        // Null ellenőrzés: csak a valós számlákat tároljuk
-        // Kiszűrjük a null, undefined értékeket és az olyan elemeket, amiknek nincs id-je
+        
         const filteredInvoices = data ? data.filter(invoice => invoice && invoice.id) : [];
         setInvoices(filteredInvoices);
       } catch (err) {
@@ -50,7 +49,7 @@ const InvoiceList = () => {
     fetchInvoices();
   }, []);
 
-  // Segédfüggvény a dátum formázásához
+  
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
@@ -61,7 +60,7 @@ const InvoiceList = () => {
     });
   };
 
-  // Pénzösszeg formázása
+  
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('hu-HU', {
       style: 'currency',

@@ -32,30 +32,30 @@ namespace HotelGuru.Services
 
         public async Task<FoglalasDto> LetrehozFoglalasAsync(FoglalasCreateDto dto,int felhasznaloId)
         {
-            // Ellenőrizzük, hogy a szoba létezik-e
+            
             var szoba = await _context.Szobak.FindAsync(dto.FoglaltSzobaId);
             if (szoba == null)
                 throw new KeyNotFoundException($"A {dto.FoglaltSzobaId} ID-val rendelkező szoba nem található.");
-            // Ellenőrizzük, hogy a felhasználó létezik-e
+            
             var felhasznalo = await _context.Felhasznalok.FindAsync(felhasznaloId);
             if (felhasznalo == null)
                 throw new KeyNotFoundException($"A {felhasznalo.Id} ID-val rendelkező felhasználó nem található.");
 
-            // Itt használhatod az AutoMapper-t, de manuálisan be kell állítanod a SzobaId-t
+            
             var foglalas = _mapper.Map<Foglalas>(dto);
 
-            // Fontos: a SzobaId-t is be kell állítani a FoglaltSzobaId alapján
+            
             foglalas.SzobaId = dto.FoglaltSzobaId;
             foglalas.FoglaloId = felhasznalo.Id;
 
-            // A FoglalasIdopontja-t is beállítjuk, ha a DTO-ban nem volt megadva
+            
             if (foglalas.FoglalasIdopontja == default)
                 foglalas.FoglalasIdopontja = DateTime.Now;
 
             await _context.Foglalasok.AddAsync(foglalas);
             await _context.SaveChangesAsync();
 
-            // Itt is használhatod az AutoMapper-t
+            
             return _mapper.Map<FoglalasDto>(foglalas);
         }
 

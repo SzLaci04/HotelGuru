@@ -10,7 +10,7 @@ const Register = () => {
     lakcim: '',
     telefonszam: '',
     bankkartya: '',
-    szerepId: 0 // Alapértelmezetten vendég
+    szerepId: 0 
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      // Adatok előkészítése
+      
       const apiFormData = {
         ...formData,
         szerepId: parseInt(formData.szerepId)
@@ -38,7 +38,7 @@ const Register = () => {
 
       console.log("Regisztráció adatok:", apiFormData);
       
-      // Közvetlen fetch hívás
+      
       try {
         const response = await fetch('https://localhost:5079/api/Felhasznalo/regisztral', {
           method: 'POST',

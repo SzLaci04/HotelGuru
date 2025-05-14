@@ -1,19 +1,19 @@
 import axios from 'axios';
 
-// Közvetlen URL a backendhez
+
 const API_URL = 'http://localhost:5079';
 
-// Axios alapkonfiguráció
+
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json'
   },
-  // Timeout beállítása (10 másodperc)
+  
   timeout: 10000
 });
 
-// Token hozzáadása minden kéréshez, ha létezik
+
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -22,7 +22,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// API metódusok
+
 export const loginUser = async (credentials) => {
   try {
     const response = await api.post('/api/Felhasznalo/bejelentkez', credentials);

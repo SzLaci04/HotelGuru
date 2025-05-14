@@ -8,7 +8,7 @@ namespace HotelGuru.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "admin")] // Csak admin férhet hozzá
+    [Authorize(Roles = "admin")] 
     public class AdminisztratorController : ControllerBase
     {
         private readonly IAdminisztratorService _adminService;

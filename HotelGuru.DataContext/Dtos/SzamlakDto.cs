@@ -8,7 +8,7 @@ namespace HotelGuru.DataContext.Dtos
 {
     public class SzamlaCreateDto
     {
-        //public int Id { get; set; }
+       
         public int FoglalasId {  get; set; }
     }
 

@@ -14,13 +14,13 @@ import InvoiceList from './components/InvoiceList';
 import AdminInvoices from './components/AdminInvoices';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-// Védett útvonal komponens
+
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
   return isAuthenticated ? children : <Navigate to="/login" />;
 };
 
-// Recepciós és Admin védett útvonal javított verziója
+
 const StaffRoute = ({ children }) => {
   const { isAuthenticated, userRole } = useAuth();
   
@@ -28,7 +28,7 @@ const StaffRoute = ({ children }) => {
     return <Navigate to="/login" />;
   }
   
-  // Elfogadható szerepkörök listája
+  
   const allowedRoles = ['admin', 'recepciós', 'recepcios', 'Recepciós', 'Admin', 'recepciÃ³s'];
   if (!allowedRoles.includes(userRole)) {
     return <Navigate to="/" />;

@@ -12,16 +12,16 @@ const ReceptionistTasks = () => {
   const [successMessage, setSuccessMessage] = useState('');
   
 
-  // Meglévő useEffect módosítása:
+  
 useEffect(() => {
   const fetchData = async () => {
     try {
       setLoading(true);
       
-      // Foglalások betöltése
+      
       await fetchBookings();
       
-      // Számlák betöltése
+      
       await fetchInvoices();
       
       setError('');
@@ -37,7 +37,7 @@ useEffect(() => {
 }, []);
 
 
-  // JWT token dekódolása UTF-8 támogatással
+
   const decodeJWT = (token) => {
     try {
       const base64Url = token.split('.')[1];
@@ -56,28 +56,27 @@ useEffect(() => {
   };
 
   
-  // Ellenőrizzük, hogy a felhasználó recepciós vagy admin-e
-  // Módosított ellenőrzés a ReceptionistTasks.js fájlban
+  
 useEffect(() => {
   console.log("Jogosultság ellenőrzés kezdete");
   
-  // JWT token kinyerése és ellenőrzése
+  
   const token = localStorage.getItem('token');
   console.log("Token létezik:", !!token);
   
   if (token) {
     try {
-      // TokenInfo: egyszerűbb módszer a token részleteinek megtekintésére
+      
       const tokenParts = token.split('.');
       if (tokenParts.length === 3) {
         const payload = JSON.parse(atob(tokenParts[1]));
         console.log("Teljes token payload:", payload);
         
-        // A szerepkör kinyerése
+        
         const role = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
         console.log("Felhasználói szerepkör:", role);
         
-        // Elfogadható szerepkörök listája
+       
         const allowedRoles = ['recepció', 'recepcio', 'Recepció', 'admin', 'recepciÃ³s', 'Admin'];
         const hasAccess = allowedRoles.includes(role);
         console.log("Van jogosultsága:", hasAccess);
@@ -109,13 +108,13 @@ useEffect(() => {
     try {
       setLoading(true);
       
-      // JWT token kinyerése
+      
       const token = localStorage.getItem('token');
       if (!token) {
         throw new Error("Nincs bejelentkezve vagy nincs megfelelő jogosultsága!");
       }
       
-      // Összes foglalás lekérése
+      
       const response = await fetch('https://localhost:5079/api/Foglalas', {
         method: 'GET',
         headers: {
@@ -132,7 +131,7 @@ useEffect(() => {
       const data = await response.json();
       console.log("Foglalások részletes adatai:", JSON.stringify(data, null, 2));
       
-      // Ellenőrizzük a szamlaId mezőt minden foglalásnál
+      
       if (Array.isArray(data)) {
         data.forEach((booking, index) => {
           console.log(`Foglalás #${index + 1} - ID: ${booking.id}, Van szamlaId?: ${booking.szamlaId ? 'Igen' : 'Nem'}`);
@@ -166,7 +165,7 @@ useEffect(() => {
       if (!response.ok) {
         const errorText = await response.text();
         console.warn(`HTTP hiba a számlák lekérésekor: ${response.status} - ${errorText}`);
-        return; // Ne dobjon hibát, csak jelezze a konzolon
+        return; 
       }
       
       const data = await response.json();
@@ -180,13 +179,13 @@ useEffect(() => {
 
 
 
-  // Vendég beléptetése (check-in)
+  
   const handleCheckIn = async (foglalasId) => {
     try {
       setSuccessMessage('');
       setError('');
       
-      // JWT token kinyerése
+    
       const token = localStorage.getItem('token');
       if (!token) {
         throw new Error("Nincs bejelentkezve vagy nincs megfelelő jogosultsága!");
@@ -206,7 +205,7 @@ useEffect(() => {
       }
       
       setSuccessMessage(`A ${foglalasId} azonosítójú foglalás vendége sikeresen beléptetve!`);
-      // Frissítsük a listát
+      
       fetchBookings();
     } catch (err) {
       console.error('Beléptetés hiba:', err);
@@ -214,19 +213,19 @@ useEffect(() => {
     }
   };
 
-  // Foglalás visszaigazolása
+  
   const handleConfirmBooking = async (foglalasId) => {
   try {
     setSuccessMessage('');
     setError('');
     
-    // JWT token kinyerése
+    
     const token = localStorage.getItem('token');
     if (!token) {
       throw new Error("Nincs bejelentkezve vagy nincs megfelelő jogosultsága!");
     }
     
-    // MÓDOSÍTSD EZT A SORT:
+    
     const response = await fetch(`https://localhost:5079/api/Recepcios/${foglalasId}/visszaigazolas`, {
       method: 'POST',
       headers: {
@@ -241,7 +240,7 @@ useEffect(() => {
     }
     
     setSuccessMessage(`A ${foglalasId} azonosítójú foglalás sikeresen visszaigazolva!`);
-    // Frissítsük a listát
+   
     fetchBookings();
   } catch (err) {
     console.error('Visszaigazolás hiba:', err);
@@ -249,13 +248,13 @@ useEffect(() => {
   }
 };
 
-  // Számla készítése
+  
   const handleCreateInvoice = async (foglalasId) => {
   try {
     setSuccessMessage('');
     setError('');
     
-    // JWT token kinyerése
+    
     const token = localStorage.getItem('token');
     if (!token) {
       throw new Error("Nincs bejelentkezve vagy nincs megfelelő jogosultsága!");
@@ -263,7 +262,7 @@ useEffect(() => {
     
     console.log(`Számla készítése a(z) ${foglalasId} foglaláshoz...`);
     
-    // Ellenőrizzük, hogy a hívás megfelelő formátumban történik
+    
     const requestData = { foglalasId: parseInt(foglalasId) };
     console.log("Küldött adatok:", JSON.stringify(requestData));
     
@@ -276,7 +275,7 @@ useEffect(() => {
       body: JSON.stringify(requestData)
     });
     
-    // Teljes válasz kiírása a konzolra
+    
     const responseText = await response.text();
     console.log(`Válasz (${response.status}):`, responseText);
     
@@ -284,7 +283,7 @@ useEffect(() => {
       throw new Error(`HTTP hiba: ${response.status} - ${responseText}`);
     }
     
-    // Próbáljuk meg a válasz szöveget JSON-ként értelmezni
+   
     let invoiceData;
     try {
       invoiceData = JSON.parse(responseText);
@@ -295,9 +294,9 @@ useEffect(() => {
     
     console.log("Számla létrehozva:", invoiceData);
     
-    // Frissítsünk minden adatot
-    await fetchBookings(); // Foglalások újra lekérése
-    await fetchInvoices();  // Számlák újra lekérése
+    
+    await fetchBookings(); 
+    await fetchInvoices();  
     
     setSuccessMessage(`A ${foglalasId} azonosítójú foglalásról sikeresen elkészült a számla!`);
   } catch (err) {
@@ -306,7 +305,7 @@ useEffect(() => {
   }
 };
 
-  // Segédfüggvény a foglalás státuszának megjelenítéséhez
+  
   const getStatusBadge = (booking) => {
     if (booking.belepve) {
       return <span className="badge bg-info">Beléptetve</span>;
@@ -317,7 +316,7 @@ useEffect(() => {
     }
   };
 
-  // Segédfüggvény a dátum formázásához
+  
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
@@ -410,11 +409,11 @@ useEffect(() => {
                             
                             {/* Itt az a logika, hogy van-e számla a foglaláshoz */}
                             {booking.belepve && (() => {
-                            // Keressük meg, van-e számla ehhez a foglaláshoz
-                            const existingInvoice = invoices.find(inv => inv.foglalasId === booking.id);
+                            
+                            const existingInvoice = invoices.find(inv => inv && inv.foglalasId === booking.id);
                             
                             if (existingInvoice) {
-                                // Ha van számla, megjelenítjük a Számla megtekintése gombot
+                                
                                 return (
                                 <button
                                     className="btn btn-sm btn-secondary"
@@ -424,7 +423,7 @@ useEffect(() => {
                                 </button>
                                 );
                             } else {
-                                // Ha nincs számla, megjelenítjük a Számla készítés gombot
+                                
                                 return (
                                 <button
                                     className="btn btn-sm btn-info"

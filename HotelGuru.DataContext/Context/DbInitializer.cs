@@ -15,16 +15,16 @@ namespace HotelGuru.DataContext
             using (var context = new AppDbContext(
                 serviceProvider.GetRequiredService<DbContextOptions<AppDbContext>>()))
             {
-                // Ellenőrizd, hogy az adatbázis létezik-e
+                
                 context.Database.Migrate();
 
-                // Nézd meg, van-e már adat az adatbázisban
+                
                 if (context.Szobak.Any())
                 {
-                    return; // Az adatbázis már inicializálva van
+                    return; 
                 }
 
-                // Szobák hozzáadása
+                
                 var szobak = new Szoba[]
                 {
                     new Szoba { AgyakSzama = 1, EjszakaAr = 15000, Statusz = SzobaStatusz.Elérhető, Felszereltseg = "TV, WiFi, Fürdőszoba" },
@@ -35,7 +35,7 @@ namespace HotelGuru.DataContext
 
                 context.Szobak.AddRange(szobak);
 
-                // Admin felhasználó létrehozása
+                
                 var admin = new Adminisztrator
                 {
                     Nev = "Admin Felhasználó",
@@ -47,7 +47,7 @@ namespace HotelGuru.DataContext
                     szerep = szerep.admin
                 };
 
-                // Recepciós felhasználó létrehozása
+                
                 var recepcios = new Recepcios
                 {
                     Nev = "Recepciós Felhasználó",
@@ -59,7 +59,7 @@ namespace HotelGuru.DataContext
                     szerep = szerep.recepciós
                 };
 
-                // Vendég felhasználó létrehozása
+                
                 var vendeg = new Felhasznalo
                 {
                     Nev = "Vendég Felhasználó",
@@ -75,7 +75,7 @@ namespace HotelGuru.DataContext
                 context.Recepciosok.Add(recepcios);
                 context.Felhasznalok.Add(vendeg);
 
-                // Plusz szolgáltatások
+                
                 var szolgaltatasok = new PluszSzolgaltatas[]
                 {
                     new PluszSzolgaltatas { SzolgaltatasNeve="Semmi", SzolgaltatasLeiras="Semmi", SzolgaltatasAra = 0 },
@@ -88,10 +88,7 @@ namespace HotelGuru.DataContext
 
                 context.SaveChanges();
 
-                //var foglalasok = new Foglalas {Id=1,FoglalasIdopontja = DateTime.Now, FoglaltSzobaID = 1, HitelesBankkartya = true, Erkezes = DateTime.Now.AddDays(3), Tavozas = DateTime.Now.AddDays(6), FoSzam = 3,Visszaigazolva=false, Belepve=false, SzobaId = 2, PluszSzolgId = 1, FoglaloId = 1 };
-                //context.Foglalasok.Add(foglalasok);
-
-                //context.SaveChanges();
+                
             }
         }
     }

@@ -7,13 +7,13 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // URL változás figyelése a megfelelő navigációhoz
+ 
   useEffect(() => {
-    // Az URL változás automatikusan újrarendere a komponenst
+    
     console.log('URL változott:', location.pathname);
   }, [location.pathname]);
 
-  // JWT token dekódolása UTF-8 támogatással
+ 
   const decodeJWT = (token) => {
     try {
       const base64Url = token.split('.')[1];
@@ -31,13 +31,13 @@ const Navbar = () => {
     }
   };
 
-  // Kijelentkezés kezelése
+  
   const handleLogout = () => {
     logout();
     navigate('/');
   };
 
-  // Ellenőrzés, hogy a felhasználó recepciós vagy admin-e
+  
   const isReceptionistOrAdmin = 
     userRole === 'recepciós' || 
     userRole === 'recepció' || 

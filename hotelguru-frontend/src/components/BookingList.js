@@ -19,7 +19,7 @@ const BookingList = () => {
         throw new Error("Nincs bejelentkezve! Foglalások lekéréséhez be kell jelentkezni.");
       }
       
-      // Párhuzamos lekérések a foglalások és plusz szolgáltatások adataihoz
+      
       const [bookingsResponse, servicesResponse] = await Promise.all([
         fetch('https://localhost:5079/api/Foglalas/SajatFoglalas', {
           method: 'GET',
@@ -40,9 +40,9 @@ const BookingList = () => {
         const errorText = await bookingsResponse.text();
         console.error('Fetch API hiba:', bookingsResponse.status, errorText);
         
-        // Ha 401-es hibát kapunk, akkor a token lejárt vagy érvénytelen
+        
         if (bookingsResponse.status === 401) {
-          // Kijelentkeztetjük a felhasználót
+          
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           alert('A munkamenet lejárt. Kérjük, jelentkezz be újra!');
@@ -56,7 +56,7 @@ const BookingList = () => {
       if (!servicesResponse.ok) {
         const errorText = await servicesResponse.text();
         console.error('Plusz szolgáltatások lekérési hiba:', servicesResponse.status, errorText);
-        // A foglalások megjelenítése plusz szolgáltatások nélkül is működik
+        
         console.warn('Plusz szolgáltatások nem érhetők el, de a foglalások megjelenítése folytatódik');
       } else {
         const servicesData = await servicesResponse.json();
@@ -85,7 +85,7 @@ const BookingList = () => {
       try {
         console.log(`Foglalás lemondása: ${id}`);
         
-        // JWT token kinyerése
+        
         const token = localStorage.getItem('token');
         if (!token) {
           throw new Error("Nincs bejelentkezve! Foglalás lemondásához be kell jelentkezni.");
@@ -106,7 +106,7 @@ const BookingList = () => {
         }
         
         alert('A foglalás sikeresen lemondva!');
-        fetchData(); // Frissítsük a listát
+        fetchData(); 
       } catch (err) {
         console.error('Foglalás lemondása hiba:', err);
         alert('Hiba történt a foglalás lemondása során: ' + (err.message || 'Ismeretlen hiba'));
@@ -114,7 +114,7 @@ const BookingList = () => {
     }
   };
 
-  // Segédfüggvény a foglalás státuszának megjelenítéséhez
+  
   const getStatusBadge = (booking) => {
     if (booking.belepve) {
       return <span className="badge bg-info">Beléptetve</span>;
@@ -125,7 +125,7 @@ const BookingList = () => {
     }
   };
 
-  // Segédfüggvény a dátum formázásához
+  
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
@@ -136,7 +136,7 @@ const BookingList = () => {
     });
   };
 
-  // Segédfüggvény a plusz szolgáltatás nevének megjelenítéséhez
+  
   const getServiceName = (serviceId) => {
     if (!pluszSzolgaltatasok || pluszSzolgaltatasok.length === 0) return 'Betöltés...';
     const service = pluszSzolgaltatasok.find(s => s.id === serviceId);

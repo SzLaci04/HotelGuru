@@ -57,32 +57,32 @@ namespace HotelGuru.Services
             var szamla = _mapper.Map<Szamla>(szamlaDto);
             szamla.KiallitasDatum = DateTime.Now;
 
-            // Napok számának kiszámítása
+            
             var napok = Math.Max(1, (foglalas.Tavozas - foglalas.Erkezes).Days);
 
-            // A helyes PluszSzolgId használata és null-ellenőrzés 
+            
             var pluszszolg = await _context.PluszSzolgaltatasok.FirstOrDefaultAsync(f => f.ID == foglalas.PluszSzolgId);
             if (pluszszolg == null)
             {
-                // Ha nincs meg a plusz szolgáltatás, használjunk egy alapértelmezett árat (0)
+                
                 pluszszolg = new PluszSzolgaltatas { SzolgaltatasAra = 0 };
             }
 
-            // A helyes SzobaId használata és null-ellenőrzés
+            
             var szoba = await _context.Szobak.FirstOrDefaultAsync(f => f.ID == foglalas.SzobaId);
             if (szoba == null)
             {
-                // Ha nincs meg a szoba, nem tudunk számlát készíteni
+                
                 return null;
             }
 
-            // Végösszeg kiszámítása
+            
             szamla.VegsoAr = foglalas.FoSzam * napok * szoba.EjszakaAr + pluszszolg.SzolgaltatasAra;
 
             await _context.Szamlak.AddAsync(szamla);
             await _context.SaveChangesAsync();
 
-            // Frissítsük a foglalást, hogy tartalmazzon hivatkozást a számlára
+            
             foglalas.SzamlaId = szamla.Id;
             _context.Foglalasok.Update(foglalas);
             await _context.SaveChangesAsync();

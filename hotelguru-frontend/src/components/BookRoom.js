@@ -14,7 +14,7 @@ const BookRoom = () => {
     erkezes: new Date().toISOString().split('T')[0],
     tavozas: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0],
     foSzam: 1,
-    pluszSzolgId: 1, // Alapértelmezett érték, ezt majd felülírjuk a lekérés után
+    pluszSzolgId: 1, 
   });
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const BookRoom = () => {
       try {
         setLoading(true);
         
-        // Párhuzamos lekérések a szoba és a plusz szolgáltatások adataihoz
+       
         const [roomResponse, serviceResponse] = await Promise.all([
           fetch(`https://localhost:5079/api/Szoba/${roomId}`, {
             method: 'GET',
@@ -38,32 +38,32 @@ const BookRoom = () => {
           })
         ]);
         
-        // Szoba válasz feldolgozása
+       
         if (!roomResponse.ok) {
           const errorText = await roomResponse.text();
           console.error('Szoba lekérési hiba:', roomResponse.status, errorText);
           throw new Error(`Szoba lekérési hiba: ${roomResponse.status} - ${errorText}`);
         }
         
-        // Plusz szolgáltatások válasz feldolgozása
+        
         if (!serviceResponse.ok) {
           const errorText = await serviceResponse.text();
           console.error('Plusz szolgáltatások lekérési hiba:', serviceResponse.status, errorText);
           throw new Error(`Plusz szolgáltatások lekérési hiba: ${serviceResponse.status} - ${errorText}`);
         }
         
-        // Adatok feldolgozása
+       
         const roomData = await roomResponse.json();
         const servicesData = await serviceResponse.json();
         
         console.log("Szoba adatok:", roomData);
         console.log("Plusz szolgáltatások:", servicesData);
         
-        // Állapot frissítése
+        
         setRoom(roomData);
         setPluszSzolgaltatasok(servicesData);
         
-        // Ha van plusz szolgáltatás, akkor az elsőt alapértelmezettként beállítjuk
+        
         if (servicesData && servicesData.length > 0) {
           setBookingData(prev => ({
             ...prev,
@@ -99,13 +99,13 @@ const BookRoom = () => {
     try {
       console.log("Foglalás létrehozása:", bookingData);
       
-      // JWT token kinyerése
+      
       const token = localStorage.getItem('token');
       if (!token) {
         throw new Error("Nincs bejelentkezve! Foglalás létrehozásához be kell jelentkezni.");
       }
       
-      // Dátumok formázása a backend által várt formátumra
+      
       const formattedData = {
         ...bookingData,
         foglalasIdopontja: new Date().toISOString(),
@@ -141,11 +141,11 @@ const BookRoom = () => {
     }
   };
 
-  // Számoljuk ki a várható végösszeget
+  
   const calculateEstimatedPrice = () => {
     if (!room || !pluszSzolgaltatasok.length) return 0;
     
-    // Naplózás a számításhoz
+   
     console.log("Számolás bemeneti adatok:", {
       ejszakaAr: room.ejszakaAr,
       foSzam: bookingData.foSzam,
@@ -154,18 +154,18 @@ const BookRoom = () => {
       pluszSzolgId: bookingData.pluszSzolgId
     });
     
-    // Éjszakák számának kiszámolása
+    
     const erkezes = new Date(bookingData.erkezes);
     const tavozas = new Date(bookingData.tavozas);
     const ejszakakSzama = Math.max(1, Math.floor((tavozas - erkezes) / (1000 * 60 * 60 * 24)));
     
-    // Kiválasztott szolgáltatás árának megkeresése
+   
     const kivalasztottSzolgaltatas = pluszSzolgaltatasok.find(
       szolg => szolg.id === parseInt(bookingData.pluszSzolgId)
     );
     const szolgaltatasAr = kivalasztottSzolgaltatas ? kivalasztottSzolgaltatas.szolgaltatasAra : 0;
     
-    // Végösszeg kiszámolása: (éjszakák száma × szoba ára × vendégek száma) + szolgáltatás ára
+   
     const szallasDij = ejszakakSzama * room.ejszakaAr * bookingData.foSzam;
     const vegosszeg = szallasDij + szolgaltatasAr;
     

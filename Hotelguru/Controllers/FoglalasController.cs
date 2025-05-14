@@ -84,7 +84,7 @@ namespace HotelGuru.Controllers
             }
 
             var foglalasok = await _foglalasService.GetFoglalasokByFelhasznaloIdAsync(felhasznaloId);
-            //Így lehet a jelenleg bejelntkezett felhasználó idjét megkapni
+            
             Console.WriteLine(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             return Ok(foglalasok);
         }
@@ -96,7 +96,7 @@ namespace HotelGuru.Controllers
         [Authorize]
         public async Task<IActionResult> GetSajatFoglalasok()
         {
-            // Kiolvassuk a bejelentkezett felhasználó azonosítóját a token-ből
+           
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
 
             if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))

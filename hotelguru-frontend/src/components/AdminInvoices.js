@@ -1,4 +1,4 @@
-// src/components/AdminInvoices.js
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -16,20 +16,19 @@ const AdminInvoices = () => {
       try {
         setLoading(true);
         
-        // JWT token kinyerése
+        
         const token = localStorage.getItem('token');
         if (!token) {
           throw new Error("Nincs bejelentkezve!");
         }
         
-        // Jogosultság ellenőrzése - módosítva, hogy a recepciósok is hozzáférjenek
-        // Elfogadható szerepkörök listája
+        
         const allowedRoles = ['admin', 'recepciós', 'recepcios', 'recepciÃ³s'];
         if (!allowedRoles.includes(userRole)) {
           throw new Error("Nincs megfelelő jogosultsága ennek az oldalnak a megtekintéséhez!");
         }
         
-        // Párhuzamos lekérések az összes számla és felhasználó adataihoz
+        
         const [invoicesResponse, usersResponse] = await Promise.all([
           fetch('https://localhost:5079/api/Recepcios/szamlak', {
             method: 'GET',
@@ -55,7 +54,7 @@ const AdminInvoices = () => {
         console.log("Összes számla:", invoicesData);
         setInvoices(invoicesData || []);
         
-        // Felhasználók betöltése, ha sikeres volt a lekérés
+        
         if (usersResponse.ok) {
           const usersData = await usersResponse.json();
           console.log("Felhasználók:", usersData);
@@ -72,13 +71,13 @@ const AdminInvoices = () => {
     fetchData();
   }, [userRole]);
 
-  // Segédfüggvény a felhasználó nevének megjelenítéséhez
+  
   const getUserName = (userId) => {
     const user = users.find(u => u.id === userId);
     return user ? user.nev : `#${userId}`;
   };
 
-  // Segédfüggvény a dátum formázásához
+  
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
@@ -91,7 +90,7 @@ const AdminInvoices = () => {
     });
   };
 
-  // Segédfüggvény a pénzösszeg formázásához
+  
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('hu-HU', {
       style: 'currency',

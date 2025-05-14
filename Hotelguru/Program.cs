@@ -10,10 +10,10 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 builder.Services.AddControllers();
 
-// CORS beállítása a React alkalmazás számára
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp",
@@ -26,11 +26,11 @@ builder.Services.AddCors(options =>
     });
 });
 
-// JWT konfiguráció
+
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 builder.Services.Configure<JwtSettings>(jwtSettings);
 
-// JWT hitelesítés beállítása
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -50,7 +50,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer("Server=(LocalDB)\\MSSQLLocalDB;Database=HotelGuruDB;Trusted_Connection=True;TrustServerCertificate=True;", options => options.MigrationsAssembly("HotelGuru"));
@@ -60,13 +60,13 @@ builder.Services.AddScoped<ISzobaService, SzobaService>();
 builder.Services.AddScoped<IAdminisztratorService, AdminisztratorService>();
 builder.Services.AddScoped<IFelhasznaloService, FelhasznaloService>();
 builder.Services.AddScoped<IRecepciosService, RecepciosService>();
-builder.Services.AddScoped<IJwtService, JwtService>(); // JWT szolgáltatás regisztrálása
+builder.Services.AddScoped<IJwtService, JwtService>(); 
 builder.Services.AddScoped<IFoglalasService, FoglalasService>();
 builder.Services.AddScoped<IRecepciosService, RecepciosService>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddEndpointsApiExplorer();
 
-// Swagger konfiguráció JWT támogatással
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -74,7 +74,7 @@ builder.Services.AddSwaggerGen(c =>
         Title = "HotelGuru API",
         Version = "v1"
     });
-    // JWT autentikáció beállítása Swagger UI-hoz
+    
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below. Example: 'Bearer 12345abcdef'",
@@ -103,25 +103,25 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "HotelGuru API v1"));
 }
 
-// CORS engedélyezése - FONTOS: Ez az UseHttpsRedirection() ELÕTT kell legyen
+
 app.UseCors("AllowReactApp");
 
 app.UseHttpsRedirection();
 
-// Sorrendbe kell rakni - elõször Authentication, aztán Authorization
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
-// Ellenõrizd, hogy ez a rész helyesen van beállítva
+
 app.UseCors("AllowReactApp");
 
 using (var scope = app.Services.CreateScope())
@@ -129,7 +129,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     try
     {
-        // Mivel a DbInitializer a Context mappában van
+        
         HotelGuru.DataContext.DbInitializer.Initialize(services);
         Console.WriteLine("Database initialized successfully.");
     }

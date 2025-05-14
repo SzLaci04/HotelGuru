@@ -16,11 +16,11 @@ const Login = () => {
     setLoading(true);
 
     try {
-      // Használjuk a kontextus login metódusát
+      
       const success = await login(email, password);
       
       if (success) {
-        // Sikeres bejelentkezés esetén navigálunk
+        
         navigate('/');
       } else {
         throw new Error('Bejelentkezés sikertelen');

@@ -15,22 +15,22 @@ const RoomList = () => {
         setLoading(true);
         console.log("Szobák lekérése...");
         
-        // JWT token kinyerése, ha létezik
+        
         const token = localStorage.getItem('token');
         const headers = {
           'Content-Type': 'application/json'
         };
         
-        // Token hozzáadása, ha létezik
+       
         if (token) {
           headers['Authorization'] = `Bearer ${token}`;
         }
         
-        // Admin/recepciós jogosultságok ellenőrzése (a token dekódolása alapján)
+       
         let isAdminOrReceptionist = false;
         if (token) {
           try {
-            // JWT token dekódolása
+            
             const tokenParts = token.split('.');
             if (tokenParts.length === 3) {
               const payload = JSON.parse(atob(tokenParts[1]));
@@ -42,9 +42,7 @@ const RoomList = () => {
           }
         }
         
-        // Endpoint kiválasztása
-        // Ha admin/recepciós és nem jelölte be a csak elérhető szobákat, akkor minden szobát lekérünk
-        // Egyébként csak az elérhető szobákat
+        
         const endpoint = (isAdminOrReceptionist && !showOnlyAvailable) ? '' : 'available';
         const url = `https://localhost:5079/api/Szoba${endpoint ? `/${endpoint}` : ''}`;
         
@@ -64,7 +62,7 @@ const RoomList = () => {
         const data = await response.json();
         console.log("Szobák adatai:", data);
         
-        // Már csak az engedélyezett szobákat jelenítjük meg
+        
         setRooms(data);
         setError('');
       } catch (err) {
@@ -78,11 +76,11 @@ const RoomList = () => {
     fetchRooms();
   }, [showOnlyAvailable]);
 
-  // Szobastátusz enum érték szöveges megfelelője
+  
   const getSzobaStatuszText = (status) => {
     console.log("Szoba státusz:", status, typeof status);
     
-    // Ha szövegként érkezik, próbáljuk számmá konvertálni
+    
     if (typeof status === 'string') {
       status = parseInt(status);
     }

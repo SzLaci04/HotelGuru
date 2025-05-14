@@ -22,7 +22,7 @@ const InvoiceViewer = () => {
       try {
         setLoading(true);
         
-        // JWT token kinyerése
+       
         const token = localStorage.getItem('token');
         if (!token) {
           throw new Error("Nincs bejelentkezve vagy nincs megfelelő jogosultsága!");
@@ -30,11 +30,10 @@ const InvoiceViewer = () => {
         
         console.log(`Számla lekérése, ID: ${invoiceId}, User Role: ${userRole}`);
 
-        // Számla lekérése közvetlenül az ID alapján
-        // Admin és recepciós az összes számlát láthatja, vendég csak a sajátjait
+        
         let invoiceData;
         
-        // Admin, recepciós esetén közvetlen ID alapú lekérés
+        
         if (userRole === 'admin' || userRole === 'recepciós' || userRole === 'recepcios') {
           const response = await fetch(`https://localhost:5079/api/Recepcios/szamlak`, {
             method: 'GET',
@@ -51,10 +50,10 @@ const InvoiceViewer = () => {
           const allInvoices = await response.json();
           console.log("Összes számla:", allInvoices);
           
-          // Keressük meg a számlát ID alapján
+        
           invoiceData = allInvoices.find(inv => inv && inv.id === parseInt(invoiceId));
         } else {
-          // Vendég esetén saját számlák lekérése
+          
           const response = await fetch(`https://localhost:5079/api/Felhasznalo/sajatSzamlak`, {
             method: 'GET',
             headers: {
@@ -78,7 +77,7 @@ const InvoiceViewer = () => {
         console.log("Megtalált számla:", invoiceData);
         setInvoice(invoiceData);
         
-        // Foglalás adatok lekérése
+        
         if (invoiceData.foglalasId) {
           try {
             const bookingResponse = await fetch(`https://localhost:5079/api/Foglalas/${invoiceData.foglalasId}`, {
@@ -111,7 +110,7 @@ const InvoiceViewer = () => {
     fetchInvoiceData();
   }, [invoiceId, navigate, isAuthenticated, userRole]);
 
-  // Segédfüggvény a dátum formázásához
+ 
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
@@ -122,7 +121,7 @@ const InvoiceViewer = () => {
     });
   };
 
-  // Pénzösszeg formázása
+ 
   const formatCurrency = (amount) => {
     if (amount === undefined || amount === null) return 'N/A';
     return new Intl.NumberFormat('hu-HU', {
@@ -160,7 +159,7 @@ const InvoiceViewer = () => {
     );
   }
 
-  // Számla megjelenítés
+  
   return (
     <div className="container mt-5">
       <div className="card">

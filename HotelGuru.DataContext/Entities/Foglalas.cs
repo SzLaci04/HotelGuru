@@ -13,7 +13,7 @@ namespace HotelGuru.DataContext.Entities
         public int FoglaltSzobaID { get; set; }
         public bool HitelesBankkartya { get; set; }
 
-        // Bővítések RecepciosService támogatásához
+        
         public DateTime Erkezes { get; set; }
         public DateTime Tavozas { get; set; }
         public int FoSzam { get; set; }
