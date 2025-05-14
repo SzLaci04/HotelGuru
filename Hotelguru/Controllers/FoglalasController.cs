@@ -63,8 +63,10 @@ namespace HotelGuru.Controllers
             return foglalas != null ? Ok(foglalas) : NotFound();
         }
 
-        // Hotelguru/Controllers/FoglalasController.cs
-        [HttpGet("sajatFoglalas/{felhasznaloId}")]
+        /// <summary>
+        /// Egy adott foglalás lekérdezése felhasználó id alapján - csak admin és recepciós
+        /// </summary>
+        [HttpGet("FelhasznaloFoglalas/{felhasznaloId}")]
         [Authorize(Roles = "vendég,recepciós,admin")]
         public async Task<IActionResult> GetFoglalasokByFelhasznaloId(int felhasznaloId)
         {
@@ -81,6 +83,25 @@ namespace HotelGuru.Controllers
             }
 
             var foglalasok = await _foglalasService.GetFoglalasokByFelhasznaloIdAsync(felhasznaloId);
+            return Ok(foglalasok);
+        }
+
+        /// <summary>
+        /// Saját foglalások
+        /// </summary>
+        [HttpGet("SajatFoglalas")]
+        [Authorize]
+        public async Task<IActionResult> GetSajatFoglalasok()
+        {
+            // Kiolvassuk a bejelentkezett felhasználó azonosítóját a token-ből
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
+            {
+                return BadRequest("Nem sikerült azonosítani a felhasználót");
+            }
+
+            var foglalasok = await _foglalasService.GetFoglalasokByFelhasznaloIdAsync(userId);
             return Ok(foglalasok);
         }
     }

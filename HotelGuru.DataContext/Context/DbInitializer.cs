@@ -59,8 +59,21 @@ namespace HotelGuru.DataContext
                     szerep = szerep.recepciós
                 };
 
+                // Vendég felhasználó létrehozása
+                var vendeg = new Felhasznalo
+                {
+                    Nev = "Vendég Felhasználó",
+                    Email = "vendeg@hotelguru.hu",
+                    Lakcim = "1234 Budapest, Példa utca 3.",
+                    Telefonszam = "36703456789",
+                    Bankkartya = "1234-5678-9012-3456",
+                    jelszo = BCrypt.Net.BCrypt.HashPassword("Vendeg123"),
+                    szerep = szerep.vendég
+                };
+
                 context.Adminisztratorok.Add(admin);
                 context.Recepciosok.Add(recepcios);
+                context.Felhasznalok.Add(vendeg);
 
                 // Plusz szolgáltatások
                 var szolgaltatasok = new PluszSzolgaltatas[]
