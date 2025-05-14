@@ -87,6 +87,11 @@ namespace HotelGuru.DataContext
                 context.PluszSzolgaltatasok.AddRange(szolgaltatasok);
 
                 context.SaveChanges();
+
+                //var foglalasok = new Foglalas {Id=1,FoglalasIdopontja = DateTime.Now, FoglaltSzobaID = 1, HitelesBankkartya = true, Erkezes = DateTime.Now.AddDays(3), Tavozas = DateTime.Now.AddDays(6), FoSzam = 3,Visszaigazolva=false, Belepve=false, SzobaId = 2, PluszSzolgId = 1, FoglaloId = 1 };
+                //context.Foglalasok.Add(foglalasok);
+
+                //context.SaveChanges();
             }
         }
     }

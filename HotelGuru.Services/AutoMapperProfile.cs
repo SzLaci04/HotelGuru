@@ -35,6 +35,8 @@ namespace HotelGuru.Services
             .ReverseMap();
             CreateMap<FoglalasCreateDto, Foglalas>()
                 .ForMember(dest => dest.SzobaId, opt => opt.MapFrom(src => src.FoglaltSzobaId));
+            CreateMap<Szamla, SzamlaDto>().ReverseMap();
+            CreateMap<SzamlaCreateDto, Szamla>();
         }
     }
 }

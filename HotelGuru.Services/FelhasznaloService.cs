@@ -16,11 +16,12 @@ namespace HotelGuru.Services
         Task<IEnumerable<RegisztraltFelhasznaloDto>> GetAllFelhasznaloAsync();
         Task<RegisztraltFelhasznaloDto> GetFelhasznaloByIdAsync(int id);
         Task<RegisztraltFelhasznaloDto> AddFelhasznaloAsync(RegisztraltFelhasznaloDto felhasznaloDto);
-        Task<RegisztraltFelhasznaloDto> UpdateFelhasznaloAsync(int id, RegisztraltFelhasznaloDto felhasznaloDto);
+        Task<RegisztraltFelhasznaloDto> UpdateFelhasznaloAsync(int id, FelhasznaloUpdateDto felhasznaloDto);
         Task<bool> DeleteFelhasznaloAsync(int id);
         Task<string> BejelentkezesAsync(FelhasznaloLoginDto felhasznaloLoginDto);
         Task<RegisztraltFelhasznaloDto> RegisztracioAsync(RegisztralFelhasznaloDto felhasznaloDto);
         Task<bool> MegrendelesPluszSzolgaltatasAsync(int felhasznaloId, string szolgaltatasNev);
+        Task<IEnumerable<SzamlaDto>> GetSajatSzamlak(int felhasznaloId);
     }
 
     public class FelhasznaloService : IFelhasznaloService
@@ -59,7 +60,7 @@ namespace HotelGuru.Services
             return _mapper.Map<RegisztraltFelhasznaloDto>(felhasznalo);
         }
 
-        public async Task<RegisztraltFelhasznaloDto> UpdateFelhasznaloAsync(int id, RegisztraltFelhasznaloDto felhasznaloDto)
+        public async Task<RegisztraltFelhasznaloDto> UpdateFelhasznaloAsync(int id, FelhasznaloUpdateDto felhasznaloDto)
         {
             var felhasznalo = await _dbContext.Felhasznalok.FindAsync(id);
             if (felhasznalo == null)
@@ -124,6 +125,18 @@ namespace HotelGuru.Services
             // Példa célból ezt itt csak logoljuk
             Console.WriteLine($"Szolgáltatás megrendelve: {szolgaltatasNev} a(z) {felhasznaloId} felhasználónak");
             return true;
+        }
+
+        public async Task<IEnumerable<SzamlaDto>> GetSajatSzamlak(int felhasznaloId)
+        {
+
+            var foglalasok = await _dbContext.Foglalasok.Where(f=>f.FoglaloId==felhasznaloId).ToListAsync();
+            List<Szamla> szamlak = new List<Szamla>();
+            foreach (var fogl in foglalasok)
+            {
+                szamlak.Add(await _dbContext.Szamlak.FirstOrDefaultAsync(sz=>sz.FoglalasId==fogl.Id));
+            }
+            return szamlak!=null?_mapper.Map<IEnumerable<SzamlaDto>>(szamlak) : null;
         }
 
         // A régi GenerateToken metódus törlésre került, helyette a JwtService-t használjuk

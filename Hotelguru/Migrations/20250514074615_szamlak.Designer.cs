@@ -4,6 +4,7 @@ using HotelGuru.DataContext.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelGuru.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250514074615_szamlak")]
+    partial class szamlak
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,7 +106,7 @@ namespace HotelGuru.Migrations
                     b.Property<int>("PluszSzolgId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SzamlaId")
+                    b.Property<int>("SzamlaId")
                         .HasColumnType("int");
 
                     b.Property<int>("SzobaId")
@@ -156,7 +159,16 @@ namespace HotelGuru.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("FelhasznaloId")
+                        .HasColumnType("int");
+
                     b.Property<int>("FoglalasId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PluszSzolgId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SzobaId")
                         .HasColumnType("int");
 
                     b.Property<int>("VegsoAr")

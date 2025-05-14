@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using HotelGuru.DataContext.Dtos;
 
 namespace HotelGuru.Controllers
 {
@@ -30,11 +31,18 @@ namespace HotelGuru.Controllers
             return result ? Ok() : NotFound();
         }
 
-        [HttpPost("{foglalasId}/szamla")]
-        public async Task<IActionResult> SzamlaKeszites(int foglalasId)
+        [HttpPost("szamlaAllitas")]
+        public async Task<IActionResult> SzamlaKeszites(SzamlaCreateDto ujszamla)
         {
-            var szamla = await _recepciosService.SzamlaKeszitesAsync(foglalasId);
+            var szamla = await _recepciosService.SzamlaKeszitesAsync(ujszamla);
             return szamla != null ? Ok(szamla) : NotFound();
+        }
+
+        [HttpGet("szamlak")]
+        public async Task<IActionResult> OsszesSzamla()
+        {
+            var szamlak = await _recepciosService.GetAllSzamlaAsync();
+            return szamlak!=null?Ok(szamlak): NotFound();
         }
     }
 }

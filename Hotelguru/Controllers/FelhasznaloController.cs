@@ -4,6 +4,7 @@ using HotelGuru.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace HotelGuru.Controllers
 {
@@ -63,11 +64,12 @@ namespace HotelGuru.Controllers
         /// <summary>
         /// Felhasználó adatainak frissítése
         /// </summary>
-        [HttpPut("{id}")]
+        [HttpPut("frissit")]
         [Authorize(Roles = "vendég,recepciós,admin")] // Minden bejelentkezett felhasználó
-        public async Task<IActionResult> UpdateFelhasznalo(int id, [FromBody] RegisztraltFelhasznaloDto felhasznaloDto)
+        public async Task<IActionResult> UpdateFelhasznalo([FromBody] FelhasznaloUpdateDto felhasznaloDto)
         {
-            var felhasznalo = await _felhasznaloService.UpdateFelhasznaloAsync(id, felhasznaloDto);
+            int felhasznaloId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var felhasznalo = await _felhasznaloService.UpdateFelhasznaloAsync(felhasznaloId, felhasznaloDto);
             if (felhasznalo == null)
                 return NotFound();
             return Ok(felhasznalo);
@@ -84,6 +86,15 @@ namespace HotelGuru.Controllers
             if (!result)
                 return NotFound();
             return NoContent();
+        }
+
+        [HttpGet("sajatSzamlak")]
+        [Authorize(Roles ="vendég,admin,recepciós")]
+        public async Task<IActionResult> GetSajatSzamlak()
+        {
+            int felhasznaloId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var szamlak = await _felhasznaloService.GetSajatSzamlak(felhasznaloId);
+            return szamlak!=null ? Ok(szamlak) : NoContent();
         }
     }
 }

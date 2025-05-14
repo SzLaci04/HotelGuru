@@ -26,7 +26,8 @@ namespace HotelGuru.Controllers
         [Authorize(Roles = "vendég,recepciós,admin")] // Minden bejelentkezett felhasználó létrehozhat foglalást
         public async Task<IActionResult> LetrehozFoglalas([FromBody] FoglalasCreateDto dto)
         {
-            var foglalas = await _foglalasService.LetrehozFoglalasAsync(dto);
+            int felhasznaloId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var foglalas = await _foglalasService.LetrehozFoglalasAsync(dto,felhasznaloId);
             return CreatedAtAction(nameof(GetFoglalas), new { id = foglalas.Id }, foglalas);
         }
 
@@ -83,6 +84,8 @@ namespace HotelGuru.Controllers
             }
 
             var foglalasok = await _foglalasService.GetFoglalasokByFelhasznaloIdAsync(felhasznaloId);
+            //Így lehet a jelenleg bejelntkezett felhasználó idjét megkapni
+            Console.WriteLine(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             return Ok(foglalasok);
         }
 
