@@ -22,37 +22,19 @@ const ProtectedRoute = ({ children }) => {
 
 // Recepciós és Admin védett útvonal javított verziója
 const StaffRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, userRole } = useAuth();
   
-  // Ha nincs bejelentkezve, visszairányítjuk a bejelentkezési oldalra
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
   }
   
-  // JWT token ellenőrzése, hogy megfelelő jogosultsága van-e
-  const token = localStorage.getItem('token');
-  if (token) {
-    try {
-      const tokenParts = token.split('.');
-      if (tokenParts.length === 3) {
-        const payload = JSON.parse(atob(tokenParts[1]));
-        console.log("StaffRoute - Token payload:", payload);
-        const role = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-        console.log("StaffRoute - Role:", role);
-        
-        // Elfogadható szerepkörök listája
-        const allowedRoles = ['recepciós', 'recepcios', 'Recepciós', 'admin', 'Admin', 'recepciÃ³s'];
-        if (allowedRoles.includes(role)) {
-          return children;
-        }
-      }
-    } catch (e) {
-      console.error('StaffRoute - Token dekódolási hiba:', e);
-    }
+  // Elfogadható szerepkörök listája
+  const allowedRoles = ['admin', 'recepciós', 'recepcios', 'Recepciós', 'Admin', 'recepciÃ³s'];
+  if (!allowedRoles.includes(userRole)) {
+    return <Navigate to="/" />;
   }
   
-  // Ha nem recepciós vagy admin, akkor a főoldalra irányítjuk
-  return <Navigate to="/" />;
+  return children;
 };
 
 const AdminRoute = ({ children }) => {
@@ -103,7 +85,6 @@ const App = () => {
               </StaffRoute>
             } 
           />
-          {/* Új útvonal a számla megtekintéséhez */}
           <Route 
             path="/invoice/:invoiceId" 
             element={

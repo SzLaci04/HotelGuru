@@ -16,43 +16,17 @@ const Login = () => {
     setLoading(true);
 
     try {
-      console.log("Bejelentkezési adatok küldése:", { email, jelszo: password });
+      // Használjuk a kontextus login metódusát
+      const success = await login(email, password);
       
-      // Közvetlen fetch hívás
-      try {
-        const response = await fetch('https://localhost:5079/api/Felhasznalo/bejelentkez', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, jelszo: password })
-        });
-        
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error('Fetch API Hiba:', response.status, errorText);
-          throw new Error(`HTTP hiba: ${response.status} - ${errorText}`);
-        }
-        
-        const token = await response.text();
-        console.log('Bejelentkezés sikeres. Token:', token);
-        
-        // JWT token mentése
-        localStorage.setItem('token', token);
-        
-        // Egyszerű felhasználói adatok mentése
-        const userInfo = { email };
-        localStorage.setItem('user', JSON.stringify(userInfo));
-        
-        alert('Sikeres bejelentkezés!');
+      if (success) {
+        // Sikeres bejelentkezés esetén navigálunk
         navigate('/');
-        return;
-      } catch (fetchError) {
-        console.error('Fetch API hiba részletei:', fetchError);
-        setError('Hiba a bejelentkezés során: ' + fetchError.message);
+      } else {
+        throw new Error('Bejelentkezés sikertelen');
       }
     } catch (err) {
-      setError('Hiba történt a bejelentkezés során.');
+      setError('Hibás email vagy jelszó. Kérjük próbálja újra.');
       console.error(err);
     } finally {
       setLoading(false);

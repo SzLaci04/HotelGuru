@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 const Navbar = () => {
-  const { isAuthenticated, logout } = useAuth();
-  const [userRole, setUserRole] = useState(null);
+  const { isAuthenticated, logout, userRole } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // URL változás figyelése a megfelelő navigációhoz
+  useEffect(() => {
+    // Az URL változás automatikusan újrarendere a komponenst
+    console.log('URL változott:', location.pathname);
+  }, [location.pathname]);
 
   // JWT token dekódolása UTF-8 támogatással
   const decodeJWT = (token) => {
@@ -25,64 +31,26 @@ const Navbar = () => {
     }
   };
 
-// Felhasználói szerepkör ellenőrzése a JWT tokenből
-useEffect(() => {
-  const token = localStorage.getItem('token'); // Hiányzott: token definíció
-  if (token) {
-    try {
-      const tokenParts = token.split('.');
-      if (tokenParts.length === 3) {
-        const payload = JSON.parse(atob(tokenParts[1]));
-        const role = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-        setUserRole(role);
-      }
-    } catch (e) {
-      console.error('Token dekódolási hiba:', e);
-      setUserRole(null);
-    }
-  } else {
-    setUserRole(null);
-  }
-}, [isAuthenticated]);
-
-  // Felhasználói szerepkör ellenőrzése a JWT tokenből
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const decoded = decodeJWT(token);
-        if (decoded) {
-          const role = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-          setUserRole(role);
-        }
-      } catch (e) {
-        console.error('Token dekódolási hiba:', e);
-        setUserRole(null);
-      }
-    } else {
-      setUserRole(null);
-    }
-  }, [isAuthenticated]);
-
   // Kijelentkezés kezelése
   const handleLogout = () => {
     logout();
     navigate('/');
   };
 
-// Ellenőrzés, hogy a felhasználó recepciós vagy admin-e
-const isReceptionistOrAdmin = 
-  userRole === 'recepciós' || 
-  userRole === 'recepció' || 
-  userRole === 'Recepciós' || 
-  userRole === 'Recepció' || 
-  userRole === 'recepcio' ||
-  userRole === 'Recepcio' ||
-  userRole === 'Recepcios' ||
-  userRole === 'recepciÃ³s'||
-  userRole === 'recepcios' ||  // Ez a jó érték a tokenben!
-  userRole === 'admin' || 
-  userRole === 'Admin';
+  // Ellenőrzés, hogy a felhasználó recepciós vagy admin-e
+  const isReceptionistOrAdmin = 
+    userRole === 'recepciós' || 
+    userRole === 'recepció' || 
+    userRole === 'Recepciós' || 
+    userRole === 'Recepció' || 
+    userRole === 'recepcio' ||
+    userRole === 'Recepcio' ||
+    userRole === 'Recepcios' ||
+    userRole === 'recepciÃ³s'||
+    userRole === 'recepcios' ||
+    userRole === 'admin' || 
+    userRole === 'Admin';
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container">
@@ -115,7 +83,8 @@ const isReceptionistOrAdmin =
                     </Link>
                   </li>
                 )}
-                {(userRole === 'admin' || userRole === 'recepciós' || userRole === 'recepcios' || userRole === 'recepciÃ³s') && (
+                {/* Összes számla menüpont - most már recepciósoknak is elérhető */}
+                {isReceptionistOrAdmin && (
                   <li className="nav-item">
                     <Link className="nav-link" to="/admin/invoices">
                       Összes számla

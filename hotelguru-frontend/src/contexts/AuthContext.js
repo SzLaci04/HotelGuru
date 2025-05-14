@@ -49,6 +49,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('userRole');
+        setCurrentUser(null);
         setUserRole(null);
       }
     }
@@ -58,6 +59,8 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
+      console.log("Bejelentkezés kezdeményezése:", email);
+      
       const response = await fetch('https://localhost:5079/api/Felhasznalo/bejelentkez', {
         method: 'POST',
         headers: {
@@ -72,17 +75,21 @@ export const AuthProvider = ({ children }) => {
       }
       
       const token = await response.text();
+      console.log('Token megkapta:', token.substring(0, 20) + '...');
       localStorage.setItem('token', token);
       
       // Szerepkör kinyerése a tokenből
       const decoded = decodeJWT(token);
       if (decoded) {
+        // A userId is kinyerhető a tokenből
+        const userId = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/nameidentifier'];
         const role = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+        console.log('Felhasználói szerepkör:', role);
         setUserRole(role);
         localStorage.setItem('userRole', role);
         
         // Egyszerű felhasználói adatok mentése
-        const userInfo = { email, role };
+        const userInfo = { email, role, userId };
         localStorage.setItem('user', JSON.stringify(userInfo));
         setCurrentUser(userInfo);
         return true;
@@ -90,7 +97,7 @@ export const AuthProvider = ({ children }) => {
       
       return false;
     } catch (error) {
-      console.error('Bejelentkezési hiba:', error);
+      console.error('Bejelentkezési hiba részletek:', error);
       return false;
     }
   };
