@@ -123,9 +123,9 @@ const App = () => {
           <Route 
             path="/admin/invoices" 
             element={
-              <AdminRoute>
+              <StaffRoute>
                 <AdminInvoices />
-              </AdminRoute>
+              </StaffRoute>
             } 
           />
         </Routes>

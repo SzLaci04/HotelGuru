@@ -9,65 +9,67 @@ const AdminInvoices = () => {
   const [error, setError] = useState('');
   const [users, setUsers] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        
-        // JWT token kinyerése
-        const token = localStorage.getItem('token');
-        if (!token) {
-          throw new Error("Nincs bejelentkezve!");
-        }
-        
-        // Admin jogosultság ellenőrzése
-        const userRole = localStorage.getItem('userRole');
-        if (userRole !== 'admin') {
-          throw new Error("Nincs megfelelő jogosultsága ennek az oldalnak a megtekintéséhez!");
-        }
-        
-        // Párhuzamos lekérések az összes számla és felhasználó adataihoz
-        const [invoicesResponse, usersResponse] = await Promise.all([
-          fetch('https://localhost:5079/api/Recepcios/szamlak', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            }
-          }),
-          fetch('https://localhost:5079/api/Felhasznalo', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            }
-          })
-        ]);
-        
-        if (!invoicesResponse.ok) {
-          throw new Error(`HTTP hiba a számlák lekérésekor: ${invoicesResponse.status}`);
-        }
-        
-        const invoicesData = await invoicesResponse.json();
-        console.log("Összes számla:", invoicesData);
-        setInvoices(invoicesData || []);
-        
-        // Felhasználók betöltése, ha sikeres volt a lekérés
-        if (usersResponse.ok) {
-          const usersData = await usersResponse.json();
-          console.log("Felhasználók:", usersData);
-          setUsers(usersData || []);
-        }
-      } catch (err) {
-        console.error('Hiba történt:', err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      
+      // JWT token kinyerése
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error("Nincs bejelentkezve!");
       }
-    };
+      
+      // Jogosultság ellenőrzése - módosítva, hogy a recepciósok is hozzáférjenek
+      const userRole = localStorage.getItem('userRole');
+      // Elfogadható szerepkörök listája
+      const allowedRoles = ['admin', 'recepciós', 'recepcios', 'recepciÃ³s'];
+      if (!allowedRoles.includes(userRole)) {
+        throw new Error("Nincs megfelelő jogosultsága ennek az oldalnak a megtekintéséhez!");
+      }
+      
+      // Párhuzamos lekérések az összes számla és felhasználó adataihoz
+      const [invoicesResponse, usersResponse] = await Promise.all([
+        fetch('https://localhost:5079/api/Recepcios/szamlak', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        }),
+        fetch('https://localhost:5079/api/Felhasznalo', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        })
+      ]);
+      
+      if (!invoicesResponse.ok) {
+        throw new Error(`HTTP hiba a számlák lekérésekor: ${invoicesResponse.status}`);
+      }
+      
+      const invoicesData = await invoicesResponse.json();
+      console.log("Összes számla:", invoicesData);
+      setInvoices(invoicesData || []);
+      
+      // Felhasználók betöltése, ha sikeres volt a lekérés
+      if (usersResponse.ok) {
+        const usersData = await usersResponse.json();
+        console.log("Felhasználók:", usersData);
+        setUsers(usersData || []);
+      }
+    } catch (err) {
+      console.error('Hiba történt:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchData();
-  }, []);
+  fetchData();
+}, []);
 
   // Segédfüggvény a felhasználó nevének megjelenítéséhez
   const getUserName = (userId) => {
@@ -121,7 +123,7 @@ const AdminInvoices = () => {
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Összes számla (Admin)</h2>
+        <h2>Összes számla</h2>
         <button className="btn btn-primary" onClick={() => window.location.reload()}>
           Frissítés
         </button>
