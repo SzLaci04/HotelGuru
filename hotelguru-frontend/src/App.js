@@ -20,7 +20,7 @@ const ProtectedRoute = ({ children }) => {
   return isAuthenticated ? children : <Navigate to="/login" />;
 };
 
-// Recepciós és Admin védett útvonal
+// Recepciós és Admin védett útvonal javított verziója
 const StaffRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
   
@@ -36,15 +36,18 @@ const StaffRoute = ({ children }) => {
       const tokenParts = token.split('.');
       if (tokenParts.length === 3) {
         const payload = JSON.parse(atob(tokenParts[1]));
+        console.log("StaffRoute - Token payload:", payload);
         const role = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+        console.log("StaffRoute - Role:", role);
         
-        // Ha recepciós vagy admin, akkor megengedjük az útvonalat
-      if (role === 'recepciós' || role === 'admin' || role === 'recepcios') {
-        return children;
-      }
+        // Elfogadható szerepkörök listája
+        const allowedRoles = ['recepciós', 'recepcios', 'Recepciós', 'admin', 'Admin', 'recepciÃ³s'];
+        if (allowedRoles.includes(role)) {
+          return children;
+        }
       }
     } catch (e) {
-      console.error('Token dekódolási hiba:', e);
+      console.error('StaffRoute - Token dekódolási hiba:', e);
     }
   }
   

@@ -57,45 +57,53 @@ useEffect(() => {
 
   
   // Ellenőrizzük, hogy a felhasználó recepciós vagy admin-e
-  useEffect(() => {
-    console.log("Jogosultság ellenőrzés kezdete");
-    
-    // JWT token kinyerése és ellenőrzése
-    const token = localStorage.getItem('token');
-    console.log("Token létezik:", !!token);
-    
-    if (token) {
-      try {
-        const decoded = decodeJWT(token);
-        console.log("Dekódolt token:", decoded);
+  // Módosított ellenőrzés a ReceptionistTasks.js fájlban
+useEffect(() => {
+  console.log("Jogosultság ellenőrzés kezdete");
+  
+  // JWT token kinyerése és ellenőrzése
+  const token = localStorage.getItem('token');
+  console.log("Token létezik:", !!token);
+  
+  if (token) {
+    try {
+      // TokenInfo: egyszerűbb módszer a token részleteinek megtekintésére
+      const tokenParts = token.split('.');
+      if (tokenParts.length === 3) {
+        const payload = JSON.parse(atob(tokenParts[1]));
+        console.log("Teljes token payload:", payload);
         
-        if (decoded) {
-          const role = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-          console.log("Felhasználói szerepkör:", role);
-          
-          // FONTOS - Ez a sor a kulcs: mindhárom lehetséges értéket ellenőrizzük
-          if (role !== 'recepciós' && role !== 'admin' && role !== 'recepcios') {
-            console.log("Nincs megfelelő jogosultság, átirányítás a főoldalra");
-            alert('Nincs megfelelő jogosultsága ennek az oldalnak a megtekintéséhez!');
-            navigate('/');
-            return; // Fontos a return, hogy ne fusson tovább a kód
-          }
-          
-          console.log("Van megfelelő jogosultság, folytatás...");
-          fetchBookings();
-        } else {
-          console.log("Token dekódolás sikertelen");
-          navigate('/login');
+        // A szerepkör kinyerése
+        const role = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+        console.log("Felhasználói szerepkör:", role);
+        
+        // Elfogadható szerepkörök listája
+        const allowedRoles = ['recepció', 'recepcio', 'Recepció', 'admin', 'recepciÃ³s', 'Admin'];
+        const hasAccess = allowedRoles.includes(role);
+        console.log("Van jogosultsága:", hasAccess);
+        
+        if (!hasAccess) {
+          console.log("Nincs megfelelő jogosultság, átirányítás a főoldalra");
+          alert('Nincs megfelelő jogosultsága ennek az oldalnak a megtekintéséhez!');
+          navigate('/');
+          return;
         }
-      } catch (e) {
-        console.error('Token dekódolási hiba részletei:', e);
+        
+        console.log("Van megfelelő jogosultság, folytatás...");
+        fetchBookings();
+      } else {
+        console.log("Token formátuma nem megfelelő");
         navigate('/login');
       }
-    } else {
-      console.log("Nincs token, átirányítás a bejelentkezési oldalra");
+    } catch (e) {
+      console.error('Token dekódolási hiba részletei:', e);
       navigate('/login');
     }
-  }, [navigate]);
+  } else {
+    console.log("Nincs token, átirányítás a bejelentkezési oldalra");
+    navigate('/login');
+  }
+}, [navigate]);
   
   const fetchBookings = async () => {
     try {

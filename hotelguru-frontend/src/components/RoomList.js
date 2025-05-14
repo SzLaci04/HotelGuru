@@ -35,7 +35,7 @@ const RoomList = () => {
             if (tokenParts.length === 3) {
               const payload = JSON.parse(atob(tokenParts[1]));
               const role = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-              isAdminOrReceptionist = role === 'admin' || role === 'recepciós';
+              isAdminOrReceptionist = role === 'admin' || role === 'recepciós' || role === 'recepciÃ³s';
             }
           } catch (e) {
             console.error('Token dekódolási hiba:', e);

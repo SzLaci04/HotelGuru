@@ -73,8 +73,13 @@ useEffect(() => {
 // Ellenőrzés, hogy a felhasználó recepciós vagy admin-e
 const isReceptionistOrAdmin = 
   userRole === 'recepciós' || 
+  userRole === 'recepció' || 
   userRole === 'Recepciós' || 
+  userRole === 'Recepció' || 
   userRole === 'recepcio' ||
+  userRole === 'Recepcio' ||
+  userRole === 'Recepcios' ||
+  userRole === 'recepciÃ³s'||
   userRole === 'recepcios' ||  // Ez a jó érték a tokenben!
   userRole === 'admin' || 
   userRole === 'Admin';
