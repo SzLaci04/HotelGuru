@@ -92,3 +92,39 @@ export const cancelBooking = async (id) => {
     throw error.response ? error.response.data : new Error('Nem sikerült lemondani a foglalást');
   }
 };
+
+export const getPluszSzolgaltatasok = async () => {
+  try {
+    const response = await api.get('/api/Szoba/pluszszolg');
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Nem sikerült lekérni a plusz szolgáltatásokat');
+  }
+};
+
+export const getRoomById = async (id) => {
+  try {
+    const response = await api.get(`/api/Szoba/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error(`Nem sikerült lekérni a szobát (ID: ${id})`);
+  }
+};
+
+export const getMyBookings = async () => {
+  try {
+    const response = await api.get('/api/Foglalas/SajatFoglalas');
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Nem sikerült lekérni a foglalásokat');
+  }
+};
+
+export const getInvoices = async () => {
+  try {
+    const response = await api.get('/api/Felhasznalo/sajatSzamlak');
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : new Error('Nem sikerült lekérni a számlákat');
+  }
+};
