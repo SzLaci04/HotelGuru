@@ -13,6 +13,12 @@ import InvoiceViewer from './components/InvoiceViewer';
 import InvoiceList from './components/InvoiceList'; 
 import AdminInvoices from './components/AdminInvoices';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import PageNotFound from './components/404NotFound';
+import AdminPage from './components/Admin/AdminMain';
+import FelhasznaloAdmin from './components/Admin/FelhasznaloAdmin';
+import SzobaAdmin from './components/Admin/SzobaAdmin';
+import FoglalasAdmin from './components/Admin/FoglalasAdmin';
+import PluszSzolgAdmin from './components/Admin/PluszSzolgAdmin';
 
 
 const ProtectedRoute = ({ children }) => {
@@ -109,6 +115,12 @@ const App = () => {
               </StaffRoute>
             } 
           />
+          <Route path='/admin' element={<AdminRoute><AdminPage/></AdminRoute>}/>
+          <Route path="/admin/szoba" element={<AdminRoute><SzobaAdmin/></AdminRoute>} />
+          <Route path="/admin/felhasznalo" element={<AdminRoute><FelhasznaloAdmin/></AdminRoute>} />
+          <Route path="/admin/foglalas" element={<AdminRoute><FoglalasAdmin/></AdminRoute>} />
+          <Route path="/admin/pluszszolg" element={<AdminRoute><PluszSzolgAdmin/></AdminRoute>} />
+          <Route path="*" element={<PageNotFound/>}/>
         </Routes>
       </Router>
     </AuthProvider>

@@ -51,6 +51,8 @@ const Navbar = () => {
     userRole === 'admin' || 
     userRole === 'Admin';
 
+  const isAdmin=userRole=="admin";
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container">
@@ -88,6 +90,14 @@ const Navbar = () => {
                   <li className="nav-item">
                     <Link className="nav-link" to="/admin/invoices">
                       Összes számla
+                    </Link>
+                  </li>
+                )}
+                {/* Admin feladatok fül - csak admin felhasználóknak */}
+                {isAdmin && (
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/admin">
+                      Admin feladatok
                     </Link>
                   </li>
                 )}
