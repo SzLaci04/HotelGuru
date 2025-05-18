@@ -10,10 +10,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HotelGuru.Services
 {
+    public class FoglalasSiker
+    {
+        public FoglalasDto _foglalasDto=null;
+        public string statuszKod="";
+    }
 
     public interface IFoglalasService
     {
-        Task<FoglalasDto> LetrehozFoglalasAsync(FoglalasCreateDto dto, int felhasznaloId);
+        Task<FoglalasSiker> LetrehozFoglalasAsync(FoglalasCreateDto dto, int felhasznaloId);
         Task<bool> LemondFoglalastAsync(int id);
         Task<IEnumerable<FoglalasDto>> GetAllFoglalasAsync();
         Task<FoglalasDto> GetFoglalasByIdAsync(int id);
@@ -30,8 +35,18 @@ namespace HotelGuru.Services
             _mapper = mapper;
         }
 
-        public async Task<FoglalasDto> LetrehozFoglalasAsync(FoglalasCreateDto dto,int felhasznaloId)
+        private bool haLefoglalva(Foglalas ezafoglalas,List<Foglalas> osszesFoglalas)
         {
+            foreach (var fog in osszesFoglalas)
+                if (ezafoglalas.SzobaId == fog.SzobaId&&!fog.Lemondva)
+                    if (ezafoglalas.Erkezes<fog.Tavozas&&ezafoglalas.Tavozas>fog.Erkezes)
+                        return true;
+            return false;
+        }
+        
+        public async Task<FoglalasSiker> LetrehozFoglalasAsync(FoglalasCreateDto dto,int felhasznaloId)
+        {
+            var eddigifoglalasok= await _context.Foglalasok.Where(f=>f.SzobaId==dto.FoglaltSzobaId).ToListAsync();
             
             var szoba = await _context.Szobak.FindAsync(dto.FoglaltSzobaId);
             if (szoba == null)
@@ -47,16 +62,21 @@ namespace HotelGuru.Services
             
             foglalas.SzobaId = dto.FoglaltSzobaId;
             foglalas.FoglaloId = felhasznalo.Id;
-
+            
             
             if (foglalas.FoglalasIdopontja == default)
                 foglalas.FoglalasIdopontja = DateTime.Now;
 
+            if (szoba.Statusz != SzobaStatusz.Elérhető)
+                return new FoglalasSiker { statuszKod="A szoba nem elérhető felújítás miatt!" };
+
+            if (haLefoglalva(foglalas, eddigifoglalasok))
+                return new FoglalasSiker { statuszKod = "A szoba erre az időpontra már le van foglalva!" };
+
             await _context.Foglalasok.AddAsync(foglalas);
             await _context.SaveChangesAsync();
-
-            
-            return _mapper.Map<FoglalasDto>(foglalas);
+                        
+            return new FoglalasSiker {_foglalasDto=_mapper.Map<FoglalasDto>(foglalas), statuszKod="siker" };
         }
 
         public async Task<bool> LemondFoglalastAsync(int id)
@@ -64,14 +84,15 @@ namespace HotelGuru.Services
             var foglalas = await _context.Foglalasok.FindAsync(id);
             if (foglalas == null) return false;
 
-            _context.Foglalasok.Remove(foglalas);
+            foglalas.Lemondva = true;
+            _context.Foglalasok.Update(foglalas);
             await _context.SaveChangesAsync();
             return true;
         }
 
         public async Task<IEnumerable<FoglalasDto>> GetAllFoglalasAsync()
         {
-            var foglalasok = await _context.Foglalasok.ToListAsync();
+            var foglalasok = await _context.Foglalasok.Where(f=>!f.Lemondva).ToListAsync();
             return _mapper.Map<IEnumerable<FoglalasDto>>(foglalasok);
         }
 

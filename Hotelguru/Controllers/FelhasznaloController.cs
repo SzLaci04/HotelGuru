@@ -19,7 +19,7 @@ namespace HotelGuru.Controllers
         }
 
         /// <summary>
-        /// Összes regisztrált felhasználó lekérése
+        /// Összes regisztrált felhasználó lekérése(csak admin kérheti le)
         /// </summary>
         [HttpGet]
         [Authorize(Roles = "admin")] // Csak admin férhet hozzá az összes felhasználóhoz

@@ -38,6 +38,13 @@ namespace HotelGuru.Controllers
             return szamla != null ? Ok(szamla) : NotFound();
         }
 
+        [HttpPost("{foglalasId}/visszautasitas")]
+        public async Task<IActionResult> Visszautasitas(int foglalasId)
+        {
+            var eredmeny= await _recepciosService.VisszautasitAsnyc(foglalasId);
+            return eredmeny? Ok($"A {foglalasId} -azonosítójú foglalást visszamondta!"):NotFound();
+        }
+
         [HttpGet("szamlak")]
         public async Task<IActionResult> OsszesSzamla()
         {

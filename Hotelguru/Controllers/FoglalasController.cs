@@ -18,7 +18,7 @@ namespace HotelGuru.Controllers
         {
             _foglalasService = foglalasService;
         }
-
+        
         /// <summary>
         /// Új foglalás létrehozása
         /// </summary>
@@ -28,7 +28,10 @@ namespace HotelGuru.Controllers
         {
             int felhasznaloId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var foglalas = await _foglalasService.LetrehozFoglalasAsync(dto,felhasznaloId);
-            return CreatedAtAction(nameof(GetFoglalas), new { id = foglalas.Id }, foglalas);
+            if (foglalas.statuszKod == "siker")
+                return CreatedAtAction(nameof(GetFoglalas), new { id = foglalas._foglalasDto.Id }, foglalas._foglalasDto);
+            else 
+                 return Conflict(foglalas.statuszKod);
         }
 
         /// <summary>

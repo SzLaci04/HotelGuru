@@ -14,6 +14,7 @@ namespace HotelGuru.Services
         Task<bool> BeleptetVendegAsync(int foglalasId);
         Task<SzamlaDto> SzamlaKeszitesAsync(SzamlaCreateDto szamla);
         Task<IEnumerable<SzamlaDto>> GetAllSzamlaAsync();
+        Task<bool> VisszautasitAsnyc(int foglalasId);
     }
     public class RecepciosService : IRecepciosService
     {
@@ -29,7 +30,7 @@ namespace HotelGuru.Services
         public async Task<bool> VisszaigazolFoglalastAsync(int foglalasId)
         {
             var foglalas = await _context.Foglalasok.FindAsync(foglalasId);
-            if (foglalas == null) return false;
+            if (foglalas == null||foglalas.Lemondva) return false;
 
             foglalas.Visszaigazolva = true;
             _context.Foglalasok.Update(foglalas);
@@ -40,8 +41,8 @@ namespace HotelGuru.Services
         public async Task<bool> BeleptetVendegAsync(int foglalasId)
         {
             var foglalas = await _context.Foglalasok.FindAsync(foglalasId);
-            if (foglalas == null || !foglalas.Visszaigazolva) return false;
-
+            if (foglalas == null || !foglalas.Visszaigazolva ||foglalas.Lemondva)
+                return false;
             foglalas.Belepve = true;
             _context.Foglalasok.Update(foglalas);
             await _context.SaveChangesAsync();
@@ -50,7 +51,7 @@ namespace HotelGuru.Services
 
         public async Task<SzamlaDto> SzamlaKeszitesAsync(SzamlaCreateDto szamlaDto)
         {
-            var foglalas = await _context.Foglalasok.FirstOrDefaultAsync(f => f.Id == szamlaDto.FoglalasId);
+            var foglalas = await _context.Foglalasok.Where(f=>!f.Lemondva).FirstOrDefaultAsync(f => f.Id == szamlaDto.FoglalasId);
             if (foglalas == null)
                 return null;
 
@@ -94,6 +95,17 @@ namespace HotelGuru.Services
         {
            var szamlak=await _context.Szamlak.ToListAsync();
            return _mapper.Map<IEnumerable<SzamlaDto>>(szamlak);
+        }
+
+        public async Task<bool> VisszautasitAsnyc(int foglalasId)
+        {
+            var foglalas = await _context.Foglalasok.FindAsync(foglalasId);
+            if (foglalas == null || foglalas.Belepve)
+                return false;
+            foglalas.Lemondva = true;
+            _context.Foglalasok.Update(foglalas);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }
