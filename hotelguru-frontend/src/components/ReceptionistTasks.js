@@ -248,6 +248,39 @@ useEffect(() => {
   }
 };
 
+  const handleRejectBooking = async (foglalasId) => {
+    if (window.confirm('Biztosan visszautasítja a foglalást?')) {
+      try {
+        setSuccessMessage('');
+        setError('');
+        
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error("Nincs bejelentkezve vagy nincs megfelelő jogosultsága!");
+        }
+        
+        const response = await fetch(`https://localhost:5079/api/Recepcios/${foglalasId}/visszautasitas`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`HTTP hiba: ${response.status} - ${errorText}`);
+        }
+        
+        setSuccessMessage(`A ${foglalasId} azonosítójú foglalás sikeresen visszautasítva!`);
+        
+        fetchBookings();
+      } catch (err) {
+        console.error('Visszautasítás hiba:', err);
+        setError('Hiba történt a visszautasítás során: ' + err.message);
+      }
+    }
+  };
   
   const handleCreateInvoice = async (foglalasId) => {
   try {
@@ -306,8 +339,11 @@ useEffect(() => {
 };
 
   
+  // Frissített státusz badge függvény
   const getStatusBadge = (booking) => {
-    if (booking.belepve) {
+    if (booking.lemondva) {
+      return <span className="badge bg-danger">Visszautasítva/Lemondva</span>;
+    } else if (booking.belepve) {
       return <span className="badge bg-info">Beléptetve</span>;
     } else if (booking.visszaigazolva) {
       return <span className="badge bg-success">Visszaigazolva</span>;
@@ -359,7 +395,6 @@ useEffect(() => {
       </button>
     </div>
 
-    {/* Ellenőrizzük a bookings tömb hosszát */}
     {console.log("Renderelés: bookings hossza =", bookings?.length)}
 
     {bookings && bookings.length > 0 ? (
@@ -388,54 +423,65 @@ useEffect(() => {
                     <td>{booking.foSzam || 0} fő</td>
                     <td>{getStatusBadge(booking)}</td>
                     <td>
-                        <div className="btn-group">
-                            {!booking.visszaigazolva && (
+                      <div className="btn-group">
+                        {!booking.visszaigazolva && !booking.lemondva && (
+                          <>
                             <button
-                                className="btn btn-sm btn-success"
-                                onClick={() => handleConfirmBooking(booking.id)}
+                              className="btn btn-sm btn-success me-1"
+                              onClick={() => handleConfirmBooking(booking.id)}
                             >
-                                Visszaigazolás
+                              Visszaigazolás
                             </button>
-                            )}
-                            
-                            {booking.visszaigazolva && !booking.belepve && (
                             <button
-                                className="btn btn-sm btn-primary"
-                                onClick={() => handleCheckIn(booking.id)}
+                              className="btn btn-sm btn-danger"
+                              onClick={() => handleRejectBooking(booking.id)}
                             >
-                                Beléptetés
+                              Visszautasítás
                             </button>
-                            )}
+                          </>
+                        )}
+                        
+                        {booking.visszaigazolva && !booking.belepve && !booking.lemondva && (
+                          <button
+                            className="btn btn-sm btn-primary"
+                            onClick={() => handleCheckIn(booking.id)}
+                          >
+                            Beléptetés
+                          </button>
+                        )}
+                        
+                        {booking.belepve && !booking.lemondva && (() => {
+                          
+                          const existingInvoice = invoices.find(inv => inv && inv.foglalasId === booking.id);
+                          
+                          if (existingInvoice) {
                             
-                            {/* Itt az a logika, hogy van-e számla a foglaláshoz */}
-                            {booking.belepve && (() => {
+                            return (
+                              <button
+                                className="btn btn-sm btn-secondary"
+                                onClick={() => navigate(`/invoice/${existingInvoice.id}`)}
+                              >
+                                Számla megtekintése
+                              </button>
+                            );
+                          } else {
                             
-                            const existingInvoice = invoices.find(inv => inv && inv.foglalasId === booking.id);
-                            
-                            if (existingInvoice) {
-                                
-                                return (
-                                <button
-                                    className="btn btn-sm btn-secondary"
-                                    onClick={() => navigate(`/invoice/${existingInvoice.id}`)}
-                                >
-                                    Számla megtekintése
-                                </button>
-                                );
-                            } else {
-                                
-                                return (
-                                <button
-                                    className="btn btn-sm btn-info"
-                                    onClick={() => handleCreateInvoice(booking.id)}
-                                >
-                                    Számla készítés
-                                </button>
-                                );
-                            }
-                            })()}
-                        </div>
-                        </td>
+                            return (
+                              <button
+                                className="btn btn-sm btn-info"
+                                onClick={() => handleCreateInvoice(booking.id)}
+                              >
+                                Számla készítés
+                              </button>
+                            );
+                          }
+                        })()}
+
+                        {booking.lemondva && (
+                          <span className="text-muted">Visszautasítva/Lemondva</span>
+                        )}
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>

@@ -15,7 +15,9 @@ namespace HotelGuru.DataContext.Dtos
         public string Email { get; set; } 
         public string Lakcim { get; set; } 
         public string Telefonszam { get; set; } 
-        public string Bankkartya { get; set; } 
+        public string Bankkartya { get; set; }
+        //HOZZÁADATAM SZEREP MIATT - FelhasznaloAdmin.js miatt
+        public int Szerep { get; set; }
     }
     public class RegisztralFelhasznaloDto
     {

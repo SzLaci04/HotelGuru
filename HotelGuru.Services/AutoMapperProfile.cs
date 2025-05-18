@@ -24,6 +24,9 @@ namespace HotelGuru.Services
             CreateMap<FelhasznaloUpdateDto, Felhasznalo>();
             CreateMap<RegisztralFelhasznaloDto, RegisztraltFelhasznaloDto>();
             CreateMap<FelhasznaloLoginDto, Felhasznalo>();
+            //HOZZÁADATAM SZEREP MIATT - FelhasznaloAdmin.js miatt
+            CreateMap<Felhasznalo, RegisztraltFelhasznaloDto>()
+                .ForMember(dest => dest.Szerep, opt => opt.MapFrom(src => src.szerep));
 
             //Foglalás mapping
             CreateMap<Foglalas, FoglalasDto>().ReverseMap();

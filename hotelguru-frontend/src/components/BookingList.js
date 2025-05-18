@@ -115,8 +115,11 @@ const BookingList = () => {
   };
 
   
+  // Frissített státusz badge függvény
   const getStatusBadge = (booking) => {
-    if (booking.belepve) {
+    if (booking.lemondva) {
+      return <span className="badge bg-danger">Visszautasítva/Lemondva</span>;
+    } else if (booking.belepve) {
       return <span className="badge bg-info">Beléptetve</span>;
     } else if (booking.visszaigazolva) {
       return <span className="badge bg-success">Visszaigazolva</span>;
@@ -191,7 +194,7 @@ const BookingList = () => {
                       <td>{getStatusBadge(booking)}</td>
                       <td>{formatDate(booking.foglalasIdopontja)}</td>
                       <td>
-                        {!booking.visszaigazolva && (
+                        {!booking.visszaigazolva && !booking.lemondva && (
                           <button
                             className="btn btn-sm btn-danger"
                             onClick={() => handleCancelBooking(booking.id)}
@@ -199,11 +202,14 @@ const BookingList = () => {
                             Lemondás
                           </button>
                         )}
-                        {booking.visszaigazolva && !booking.belepve && (
+                        {booking.visszaigazolva && !booking.belepve && !booking.lemondva && (
                           <span className="text-muted">Elfogadva</span>
                         )}
-                        {booking.belepve && (
+                        {booking.belepve && !booking.lemondva && (
                           <span className="text-muted">Aktív</span>
+                        )}
+                        {booking.lemondva && (
+                          <span className="text-muted">Lemondva/Visszautasítva</span>
                         )}
                       </td>
                     </tr>
