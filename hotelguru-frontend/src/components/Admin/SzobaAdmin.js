@@ -1,50 +1,196 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function SzobaAdmin(){
-    return <div className="container mt-5">
-        <div className="jumbotron">
-            <h3 className="display-6">Szoba admin feladatok</h3>
-            <div className="row mt-5 mx-auto text-center">
-                <div className="col-lg-6 col-sm-12 card p-1">
-                    <div className="card-header">
-                        <h5 className="card-title">
-                            Szoba hozzádása
-                        </h5>
+function SzobaAdmin() {
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+    const [roomData, setRoomData] = useState({
+        agyakSzama: 1,
+        ejszakaAr: 15000,
+        statusz: "0", // Default: Elérhető
+        felszereltseg: "TV, WiFi, Fürdőszoba"
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setRoomData({
+            ...roomData,
+            [name]: name === "agyakSzama" || name === "ejszakaAr" 
+                ? parseInt(value) 
+                : value
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError("");
+        setSuccessMessage("");
+
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                throw new Error("Nincs bejelentkezve vagy nincs megfelelő jogosultsága!");
+            }
+
+            // Adatok előkészítése - a backend SzobaCreateDto struktúrát vár
+            const requestData = {
+                agyakSzama: parseInt(roomData.agyakSzama),
+                ejszakaAr: parseInt(roomData.ejszakaAr),
+                statusz: roomData.statusz, // Szöveg formátumban küldjük
+                felszereltseg: roomData.felszereltseg
+            };
+
+            console.log("Szoba létrehozási adatok:", requestData);
+
+            const response = await fetch("https://localhost:5079/api/Szoba", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(requestData)
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Hiba a szoba létrehozása során: ${response.status} - ${errorText}`);
+            }
+
+            const data = await response.json();
+            console.log("Szoba sikeresen létrehozva:", data);
+            setSuccessMessage(`A szoba sikeresen létrehozva! Azonosító: ${data.id}`);
+            
+            // Űrlap alaphelyzetbe állítása
+            setRoomData({
+                agyakSzama: 1,
+                ejszakaAr: 15000,
+                statusz: "0",
+                felszereltseg: "TV, WiFi, Fürdőszoba"
+            });
+        } catch (err) {
+            console.error("Hiba a szoba létrehozása során:", err);
+            setError(err.message || "Ismeretlen hiba történt a szoba létrehozása során");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="container mt-5">
+            <div className="jumbotron">
+                <h3 className="display-6">Szoba létrehozása</h3>
+
+                {error && (
+                    <div className="alert alert-danger alert-dismissible fade show" role="alert">
+                        {error}
+                        <button type="button" className="btn-close" onClick={() => setError("")}></button>
                     </div>
-                    <div className="card-body text-left">
-                        <form>
-                            <fieldset>
-                                <legend>
-                                    <label htmlFor="agyak_szama" className="form-label">Ágyak száma: </label>
-                                </legend>
-                                <input type="number" min={0} value={0} name="agyak_szama" id="agyak_szama" className="form-control"/>
-                            </fieldset>
-                            <fieldset>
-                                <legend>
-                                    <label htmlFor="ejszaka_ar" className="form-label">Egy éjszaka ára: </label>
-                                </legend>
-                                <input type="number" min={0} value={0} name="ejszaka_ar" id="ejszaka_ar" className="form-control"/>
-                            </fieldset>
-                            <fieldset>
-                                <legend>
-                                    <label htmlFor="statusz" className="form-label">Státusz: </label>
-                                </legend>
-                                <select name="statusz" id="statusz">
-                                    <option value="1" key="1">Elérhető</option>
-                                    <option value="3" key="2">Felújítás alatt</option>
-                                </select>
-                            </fieldset>
-                            <fieldset>
-                                <legend>
-                                    <label htmlFor="felszereltseg" className="form-label">Felszereltség: </label>
-                                </legend>
-                                <input type="text" name="felszereltseg" id="felszereltseg" className="form-control"/>
-                            </fieldset>
-                        </form>
+                )}
+
+                {successMessage && (
+                    <div className="alert alert-success alert-dismissible fade show" role="alert">
+                        {successMessage}
+                        <button type="button" className="btn-close" onClick={() => setSuccessMessage("")}></button>
+                    </div>
+                )}
+
+                <div className="row mt-4">
+                    <div className="col-lg-6 col-md-8 mx-auto">
+                        <div className="card">
+                            <div className="card-header bg-primary text-white">
+                                <h5 className="card-title mb-0">Szoba adatok</h5>
+                            </div>
+                            <div className="card-body">
+                                <form onSubmit={handleSubmit}>
+                                    <div className="mb-3">
+                                        <label htmlFor="agyakSzama" className="form-label">Ágyak száma:</label>
+                                        <input 
+                                            type="number" 
+                                            min="1" 
+                                            className="form-control" 
+                                            id="agyakSzama" 
+                                            name="agyakSzama" 
+                                            value={roomData.agyakSzama} 
+                                            onChange={handleChange}
+                                            required 
+                                        />
+                                    </div>
+
+                                    <div className="mb-3">
+                                        <label htmlFor="ejszakaAr" className="form-label">Egy éjszaka ára (Ft):</label>
+                                        <input 
+                                            type="number" 
+                                            min="1000" 
+                                            className="form-control" 
+                                            id="ejszakaAr" 
+                                            name="ejszakaAr" 
+                                            value={roomData.ejszakaAr} 
+                                            onChange={handleChange}
+                                            required 
+                                        />
+                                    </div>
+
+                                    <div className="mb-3">
+                                        <label htmlFor="statusz" className="form-label">Státusz:</label>
+                                        <select 
+                                            className="form-select" 
+                                            id="statusz" 
+                                            name="statusz" 
+                                            value={roomData.statusz} 
+                                            onChange={handleChange}
+                                            required
+                                        >
+                                            <option value="0">Elérhető</option>
+                                            <option value="2">Felújítás alatt</option>
+                                        </select>
+                                    </div>
+
+                                    <div className="mb-3">
+                                        <label htmlFor="felszereltseg" className="form-label">Felszereltség:</label>
+                                        <textarea 
+                                            className="form-control" 
+                                            id="felszereltseg" 
+                                            name="felszereltseg" 
+                                            value={roomData.felszereltseg} 
+                                            onChange={handleChange}
+                                            rows="3"
+                                            required
+                                        ></textarea>
+                                        <small className="text-muted">Pl.: TV, WiFi, Fürdőszoba, Minibár, stb.</small>
+                                    </div>
+
+                                    <div className="d-grid gap-2 mt-4">
+                                        <button 
+                                            type="submit" 
+                                            className="btn btn-primary" 
+                                            disabled={loading}
+                                        >
+                                            {loading ? (
+                                                <>
+                                                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                                    Feldolgozás...
+                                                </>
+                                            ) : "Szoba létrehozása"}
+                                        </button>
+                                        <button 
+                                            type="button" 
+                                            className="btn btn-secondary" 
+                                            onClick={() => navigate("/admin")}
+                                        >
+                                            Vissza az admin felületre
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    );
 }
+
 export default SzobaAdmin;

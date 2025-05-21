@@ -210,6 +210,11 @@ const BookRoom = () => {
               <div className="mb-3">
                 <span className="fw-bold">Felszereltség:</span> {room.felszereltseg}
               </div>
+
+              <div className="mb-3">
+                <span className="fw-bold">Elérhetőség:</span> {room.statusz}
+              </div>
+
               <div className="mt-4 p-3 bg-light rounded">
                 <h6 className="fw-bold">Becsült végösszeg:</h6>
                 <p className="fs-4 text-primary mb-0">{calculateEstimatedPrice()} Ft</p>
@@ -324,12 +329,15 @@ const BookRoom = () => {
                     Elfogadom, hogy a bankkártyámat hitelesítik a foglaláshoz
                   </label>
                 </div>
-
+                {
+                  room.statusz=="Elérhető"&&
                 <div className="d-grid gap-2">
                   <button type="submit" className="btn btn-primary btn-lg">
                     Foglalás létrehozása
                   </button>
                 </div>
+
+                }
               </form>
             </div>
           </div>
