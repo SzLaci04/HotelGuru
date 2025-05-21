@@ -23,6 +23,8 @@ namespace HotelGuru.Services
         Task<IEnumerable<FoglalasDto>> GetAllFoglalasAsync();
         Task<FoglalasDto> GetFoglalasByIdAsync(int id);
         Task<IEnumerable<FoglalasDto>> GetFoglalasokByFelhasznaloIdAsync(int felhasznaloId);
+        Task<bool> DeleteFoglalasAsync(int id);
+        Task<IEnumerable<FoglalasDto>> GetAllFoglalasIncludingCancelledAsync();
     }
     public class FoglalasService : IFoglalasService
     {
@@ -109,6 +111,22 @@ namespace HotelGuru.Services
                 .Include(f => f.Foglalo)
                 .Where(f => f.FoglaloId == felhasznaloId)
                 .ToListAsync();
+            return _mapper.Map<IEnumerable<FoglalasDto>>(foglalasok);
+        }
+
+        public async Task<bool> DeleteFoglalasAsync(int id)
+        {
+            var foglalas = await _context.Foglalasok.FindAsync(id);
+            if (foglalas == null) return false;
+
+            _context.Foglalasok.Remove(foglalas);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<IEnumerable<FoglalasDto>> GetAllFoglalasIncludingCancelledAsync()
+        {
+            var foglalasok = await _context.Foglalasok.ToListAsync();
             return _mapper.Map<IEnumerable<FoglalasDto>>(foglalasok);
         }
     }

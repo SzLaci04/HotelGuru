@@ -110,5 +110,29 @@ namespace HotelGuru.Controllers
             var foglalasok = await _foglalasService.GetFoglalasokByFelhasznaloIdAsync(userId);
             return Ok(foglalasok);
         }
+
+        /// <summary>
+        /// Foglalás végleges törlése az adatbázisból (csak admin számára)
+        /// </summary>
+        [HttpDelete("admin/{id}")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> AdminDeleteFoglalas(int id)
+        {
+            var result = await _foglalasService.DeleteFoglalasAsync(id);
+            if (result)
+                return NoContent();
+            return NotFound("A foglalás nem található vagy nem törölhető.");
+        }
+
+        /// <summary>
+        /// Összes foglalás lekérdezése, beleértve a lemondottakat is - csak admin számára
+        /// </summary>
+        [HttpGet("admin/all")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> GetAllBookingsIncludingCancelled()
+        {
+            var foglalasok = await _foglalasService.GetAllFoglalasIncludingCancelledAsync();
+            return Ok(foglalasok);
+        }
     }
 }
